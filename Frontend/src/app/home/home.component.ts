@@ -13,55 +13,55 @@ export class HomeComponent {
     {
       title: 'Die Schöne und das Beast',
       isbn: '1234567890',
-      coverUrl: 'buchcover1.jpg',
+      coverUrl: '../../assets/Buch1.jpg',
       type: 'Buch'
     },
     {
       title: 'der Grinch',
       isbn: '0987654321',
-      coverUrl: 'buchcover2.jpg',
+      coverUrl: '../../assets/Buch2.jpg',
       type: 'Buch'
     },
     {
       title: 'Wheinachtsmann & Co',
       isbn: '1357924680',
-      coverUrl: 'buchcover3.jpg',
+      coverUrl: '../../assets/Buch3.jpg',
       type: 'Buch'
     },
     {
       title: 'Top Hits 1994',
       isbn: '0987654322',
-      coverUrl: 'cdcover1.jpg',
+      coverUrl: '../../assets/CD1.jpg',
       type: 'CD'
     },
     {
       title: 'Top Hits',
       isbn: '0987654323',
-      coverUrl: 'cdcover2.jpg',
+      coverUrl: '../../assets/CD2.jpg',
       type: 'CD'
     },
     {
       title: 'Mero',
       isbn: '0987654324',
-      coverUrl: 'cdcover3.jpg',
+      coverUrl: '../../assets/CD3.jpg',
       type: 'CD'
     },
     {
       title: 'Der Zwerg',
       isbn: '0987654325',
-      coverUrl: 'filmcover1.jpg',
+      coverUrl: '../../assets/Film1.jpg',
       type: 'Film'
     },
     {
       title: 'Der Hobbit',
       isbn: '0987654326',
-      coverUrl: 'filmcover2.jpg',
+      coverUrl: '../../assets/Film2.jpg',
       type: 'Film'
     },
     {
       title: 'Titanic',
       isbn: '0987654327',
-      coverUrl: 'filmcover3.jpg',
+      coverUrl: '../../assets/Film3.jpg',
       type: 'Film'
     }
   ];

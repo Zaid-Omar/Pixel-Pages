@@ -1,12 +1,12 @@
 <div class="abstand">
-  <div class="container mx-auto py-4">
-    <input type="text" class="w-full border rounded-md px-4 py-2 mb-4" placeholder="Medien suchen..." [(ngModel)]="searchTerm" (input)="searchMedia()">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <div *ngFor="let media of filteredMedia" class="bg-white border rounded-md p-4 shadow-md">
+  <div class="container mx-auto py-4 ">
+    <input type="text" class="w-full border rounded-md px-4 py-2 mb-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Medien suchen..." [(ngModel)]="searchTerm" (input)="searchMedia()">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ">
+      <div *ngFor="let media of filteredMedia" class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
         <img [src]="media.coverUrl" alt="Mediencover" class="w-full h-40 object-cover mb-4">
-        <h2 class="text-lg font-semibold mb-2">{{ media.title }}</h2>
-        <p class="text-gray-600 mb-2">ISBN: {{ media.isbn }}</p>
-        <p class="text-gray-600 mb-2">Typ: {{ media.type }}</p>
+        <h2 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ media.title }}</h2>
+        <p class="text-gray-600 mb-2 dark:text-gray-400">ISBN: {{ media.isbn }}</p>
+        <p class="text-gray-600 mb-2 dark:text-gray-400">Typ: {{ media.type }}</p>
         <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Mehr erfahren</button>
       </div>
     </div>
