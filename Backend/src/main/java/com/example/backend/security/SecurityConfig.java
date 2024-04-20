@@ -27,18 +27,16 @@ public class SecurityConfig {
     private UserDetailsService ourUserDetailsService;
     @Autowired
     private JWTAuthFilter jwtAuthFIlter;
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST,"/auth/**").permitAll()
-                        .requestMatchers("/adminuser/**").hasAnyAuthority("USER", "ADMIN")
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(request -> request
+                        .anyRequest().permitAll() // Erlaubt allen Anfragen den Zugriff
+                )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authenticationProvider(authenticationProvider()).addFilterBefore(
-                        jwtAuthFIlter, UsernamePasswordAuthenticationFilter.class
-                );
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFIlter, UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
