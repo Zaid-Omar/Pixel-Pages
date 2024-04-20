@@ -9,63 +9,73 @@ import { CommonModule } from '@angular/common';
 })
 export class HomeComponent {
   searchTerm: string = '';
-  books: any[] = [
+  media: any[] = [
     {
-      title: 'Buch 1',
+      title: 'Die Schöne und das Beast',
       isbn: '1234567890',
-      coverUrl: 'buchcover1.jpg'
+      coverUrl: 'buchcover1.jpg',
+      type: 'Buch'
     },
     {
-      title: 'Buch 2',
+      title: 'der Grinch',
       isbn: '0987654321',
-      coverUrl: 'buchcover2.jpg'
+      coverUrl: 'buchcover2.jpg',
+      type: 'Buch'
     },
     {
-      title: 'Buch 3',
+      title: 'Wheinachtsmann & Co',
       isbn: '1357924680',
-      coverUrl: 'buchcover3.jpg'
+      coverUrl: 'buchcover3.jpg',
+      type: 'Buch'
     },
     {
-      title: 'Buch 1',
-      isbn: '1234567890',
-      coverUrl: 'buchcover1.jpg'
+      title: 'Top Hits 1994',
+      isbn: '0987654322',
+      coverUrl: 'cdcover1.jpg',
+      type: 'CD'
     },
     {
-      title: 'Buch 2',
-      isbn: '0987654321',
-      coverUrl: 'buchcover2.jpg'
+      title: 'Top Hits',
+      isbn: '0987654323',
+      coverUrl: 'cdcover2.jpg',
+      type: 'CD'
     },
     {
-      title: 'Buch 3',
-      isbn: '1357924680',
-      coverUrl: 'buchcover3.jpg'
+      title: 'Mero',
+      isbn: '0987654324',
+      coverUrl: 'cdcover3.jpg',
+      type: 'CD'
     },
     {
-      title: 'Buch 1',
-      isbn: '1234567890',
-      coverUrl: 'buchcover1.jpg'
+      title: 'Der Zwerg',
+      isbn: '0987654325',
+      coverUrl: 'filmcover1.jpg',
+      type: 'Film'
     },
     {
-      title: 'Buch 2',
-      isbn: '0987654321',
-      coverUrl: 'buchcover2.jpg'
+      title: 'Der Hobbit',
+      isbn: '0987654326',
+      coverUrl: 'filmcover2.jpg',
+      type: 'Film'
     },
     {
-      title: 'Buch 3',
-      isbn: '1357924680',
-      coverUrl: 'buchcover3.jpg'
-    },
+      title: 'Titanic',
+      isbn: '0987654327',
+      coverUrl: 'filmcover3.jpg',
+      type: 'Film'
+    }
   ];
-  filteredBooks: any[] = [];
+  filteredMedia: any[] = [];
 
   constructor() {
-    this.filteredBooks = this.books;
+    this.filteredMedia = this.media;
   }
 
-  searchBooks() {
-    this.filteredBooks = this.books.filter(book =>
-      book.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-      book.isbn.toLowerCase().includes(this.searchTerm.toLowerCase())
+  searchMedia() {
+    this.filteredMedia = this.media.filter(item =>
+      item.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      item.isbn.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      item.type.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }
 }
