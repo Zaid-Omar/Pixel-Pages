@@ -1,1 +1,16 @@
-<p>home works!</p>
+<div class="abstand">
+  <div class="container mx-auto py-4">
+    <!-- Suchleiste -->
+    <input type="text" class="w-full border rounded-md px-4 py-2 mb-4" placeholder="Bücher suchen..." [(ngModel)]="searchTerm" (input)="searchBooks()">
+
+    <!-- Buchkarten -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div *ngFor="let book of filteredBooks" class="bg-white border rounded-md p-4 shadow-md">
+        <img [src]="book.coverUrl" alt="Buchcover" class="w-full h-40 object-cover mb-4">
+        <h2 class="text-lg font-semibold mb-2">{{ book.title }}</h2>
+        <p class="text-gray-600 mb-2">ISBN: {{ book.isbn }}</p>
+        <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Mehr erfahren</button>
+      </div>
+    </div>
+  </div>
+</div>
