@@ -6,6 +6,7 @@ import {HttpClient, HttpClientModule} from "@angular/common/http";
 import {DomSanitizer} from "@angular/platform-browser";
 import {FormsModule} from "@angular/forms";
 import {User} from "../entity/User";
+import {UserRole} from "../entity/UserRole";
 
 @Component({
   selector: 'app-signup',
@@ -28,6 +29,7 @@ export class SignupComponent {
 
   public signUp(): void {
     const signUp = new User(0,this.vorname,this.nachname,this.benutzername,this.email,this.passwort,null);
+    console.log(signUp);
     this.http.post<ReqRes>("http://localhost:8080/api/auth/signup", signUp)
       .subscribe(
         (response: ReqRes) => {

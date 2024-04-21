@@ -8,8 +8,7 @@ export class User  {
   private benutzername: string;
   private email: string;
   private passwort: string;
-  private roles: UserRole[];
-
+  private roles: any
   constructor(
     id: number,
     vorname: string,
