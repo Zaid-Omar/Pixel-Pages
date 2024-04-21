@@ -1,1 +1,20 @@
-<p>buchungen works!</p>
+<div class="abstand">
+  <div class="container mx-auto py-4">
+    <input type="text" class="w-full border rounded-md px-4 py-2 mb-4 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Bücher suchen..." [(ngModel)]="searchTerm" (input)="searchBooks()">
+    <div *ngIf="bookings.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div *ngFor="let booking of bookings" class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
+        <h2 class="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{{ booking.title }}</h2>
+        <p class="text-gray-600 mb-2 dark:text-gray-400">Kategorie: {{ booking.category }}</p>
+        <p class="text-gray-600 mb-2 dark:text-gray-400">ISBN: {{ booking.isbn }}</p>
+        <p class="text-gray-600 mb-2 dark:text-gray-400">Abgabedatum: {{ booking.dueDate }}</p>
+        <div class="flex justify-between mt-4">
+          <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2" (click)="extendBooking(booking)">Verlängern</button>
+          <button class="bg-red-500 text-white px-4 py-2 rounded-md" (click)="returnBook(booking)">Zurückgeben</button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="bookings.length === 0" class="text-center text-gray-600 dark:text-gray-400 mt-8">
+      Keine Bücher gefunden.
+    </div>
+  </div>
+</div>
