@@ -16,6 +16,9 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
+  vorname:any;
+  nachname:any;
+  benutzername: any;
   email: any;
   passwort: any;
   token: any;
@@ -37,6 +40,9 @@ constructor(private http: HttpClient,private sanitizer: DomSanitizer) {}
         }
       );
   }
+
+
+
   public getAllUers(){
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${localStorage.getItem("token")}`

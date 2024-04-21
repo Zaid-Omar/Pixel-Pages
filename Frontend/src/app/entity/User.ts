@@ -17,7 +17,7 @@ export class User  {
     benutzername: string,
     email: string,
     passwort: string,
-    roles: UserRole[]
+    roles: any
   ) {
     this.id = id;
     this.vorname = vorname;
@@ -27,6 +27,7 @@ export class User  {
     this.passwort = passwort;
     this.roles = roles;
   }
+
 
   // Implementierung der UserDetails-Methoden hier (falls erforderlich)
 }
