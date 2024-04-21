@@ -5,6 +5,7 @@ import com.example.backend.repository.MediaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.List;
 
 @Service
@@ -27,7 +28,15 @@ public class MediaService {
     }
 
     public Media addMedia(Media media) {
-        media.setStatus(true);
+
+        Media newMedia =Media.builder()
+                .titel(media.getTitel())
+                .autor(media.getAutor())
+                .typ(media.getTyp())
+                .status(true)
+                .bild(media.getBild())
+                .build();
+
         return mediaRepository.save(media);
     }
     public Media updateMedia(Media media) {
