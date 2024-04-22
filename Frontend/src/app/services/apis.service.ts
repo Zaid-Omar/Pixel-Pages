@@ -43,13 +43,13 @@ export class ApisService {
 
   private baseUrl = 'http://localhost:8080/api/auth'
 
-  public signIn(reqRes: LoginEntity): Observable<ReqRes> {
-    const login = new LoginEntity (reqRes.email, reqRes.passwort)
-    return this.http.post<ReqRes>(`${this.baseUrl}/signin`, login);
+  public signIn(loginEntity: ReqRes): Observable<ReqRes> {
+    console.log(loginEntity)
+    return this.http.post<ReqRes>(`${this.baseUrl}/signin`, loginEntity);
   }
 
-  public signUp(RegisterEntity: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/signup`, RegisterEntity);
+  public signUp(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.post<ReqRes>(`${this.baseUrl}/signup`, registerEntity);
   }
 
 }

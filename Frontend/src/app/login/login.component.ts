@@ -50,10 +50,11 @@ export class LoginComponent {
 
   test() {
     if (this.loginForm.valid) {
-      const login: LoginEntity = this.loginForm.value;
-      console.log(login)
+      console.log(this.loginForm.value)
+      const login: ReqRes = this.loginForm.value;
       this.prodser.signIn(login).subscribe(
       (response: ReqRes) => {
+        console.log(response.token)
         if (response.token) {
           this.token = response.token;
           localStorage.setItem("token", response.token);
