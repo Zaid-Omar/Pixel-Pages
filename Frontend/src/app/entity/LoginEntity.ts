@@ -1,6 +1,6 @@
 export class LoginEntity {
-  private email: any;
-  private passwort: any
+   email: any;
+   passwort: any
 
 
   constructor(email: string, passwort: string) {

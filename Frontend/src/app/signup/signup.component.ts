@@ -1,4 +1,4 @@
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { FormGroup } from '@angular/forms';
 import { Component} from '@angular/core';
@@ -15,7 +15,7 @@ import { ReqRes } from '../entity/ReqRes';
 export class SignupComponent{
   registerForm: FormGroup;
 
-  constructor( private formBuilder: FormBuilder, private prodser: ApisService) {
+  constructor( private formBuilder: FormBuilder,private router: Router, private prodser: ApisService) {
     this.registerForm = this.formBuilder.group({
       vorname: ['', Validators.required],
       nachname: ['', Validators.required],
@@ -30,7 +30,9 @@ export class SignupComponent{
       const offerData: ReqRes = this.registerForm.value;
       this.prodser.signUp(offerData).subscribe(
       (response) => {
-        console.log('Anzeige erfolgreich hinzugefügt:', response);
+        console.log('Benutzer hinzugefügt:', response);
+        this.router.navigate(['/login']);
+
       },
       (error) => {
         console.log('Anzeige war nicht erfolgreich');

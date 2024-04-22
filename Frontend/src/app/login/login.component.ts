@@ -8,6 +8,8 @@ import { Media } from "../entity/MediaEntity";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
+import { ApisService } from '../services/apis.service';
+import { log } from 'console';
 
 @Component({
   selector: 'app-login',
@@ -38,33 +40,37 @@ export class LoginComponent {
     private sanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
     private router: Router,
+    private prodser: ApisService
   ) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
+      email: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
 
-  public signIn(): void {
-    const login = new LoginEntity(this.email, this.passwort);
-    this.http.post<ReqRes>("http://localhost:8080/api/auth/signin", login)
-      .subscribe(
-        (response: ReqRes) => {
-          if (response.token) {
-            this.token = response.token;
-            localStorage.setItem("token", response.token);
-            console.log('Token:', response.token);
-            console.log('Anmeldung erfolgreich');
-            this.router.navigate(['/']);
-          } else {
-            console.log('Anmeldung fehlgeschlagen');
-          }
-        },
-        error => {
-          console.error('Fehler bei der Anmeldung:', error);
+  test() {
+    if (this.loginForm.valid) {
+      const login: LoginEntity = this.loginForm.value;
+      console.log(login)
+      this.prodser.signIn(login).subscribe(
+      (response: ReqRes) => {
+        if (response.token) {
+          this.token = response.token;
+          localStorage.setItem("token", response.token);
+          console.log('Token:', response.token);
+          console.log('Anmeldung erfolgreich');
+          this.router.navigate(['/']);
+        } else {
+          console.log('Anmeldung fehlgeschlagen')
+          console.log(this.loginForm.value);
         }
-      );
-  }
+      },
+      error => {
+        console.error('Fehler bei der Anmeldung:', error);
+      }
+    );
+}}
+
 
   public getAllUsers() {
     const headers = new HttpHeaders({
