@@ -55,15 +55,21 @@ public class AuthService {
         try {
 
             var user = userRepository.findByEmail(signingRequest.getEmail());
-            System.out.println("USER IS: "+ user);
-            var jwt = jwtUtils.generateToken(user);
-            var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
-            response.setStatusCode(200);
-            response.setToken(jwt);
-            response.setRefreshToken(refreshToken);
-            response.setExpirationTime("24Hr");
-            response.setMessage("Successfully Signed In");
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPasswort()));
+            if (user != null && passwordEncoder.matches(signingRequest.getPasswort(), user.getPasswort())) {
+                // Das eingegebene Passwort stimmt mit dem Passwort des Benutzers überein
+                var jwt = jwtUtils.generateToken(user);
+                var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
+                response.setStatusCode(200);
+                response.setToken(jwt);
+                response.setRefreshToken(refreshToken);
+                response.setExpirationTime("24Hr");
+                response.setMessage("Successfully Signed In");
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
+            } else {
+                // Das eingegebene Passwort stimmt nicht mit dem Passwort des Benutzers überein
+                response.setStatusCode(401);
+                response.setMessage("Invalid credentials");
+            }
         }catch (Exception e){
             response.setStatusCode(500);
             response.setError(e.getMessage());
