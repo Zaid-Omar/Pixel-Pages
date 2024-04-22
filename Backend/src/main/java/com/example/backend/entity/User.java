@@ -1,6 +1,7 @@
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,16 +27,20 @@ public class User implements UserDetails{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Valid
     @Column
     private String vorname;
+    @Valid
     @Column
     private String nachname;
-
+    @Valid
     @Column
     private String benutzername;
-
+    @Valid
     @Column
     private String email;
+
+    @Valid
     @Column
     private String passwort;
 
