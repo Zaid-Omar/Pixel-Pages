@@ -43,8 +43,8 @@ export class ApisService {
 
   private baseUrl = 'http://localhost:8080/api/auth'
 
-  public signIn(loginEntity: ReqRes): Observable<ReqRes> {
-    console.log(loginEntity)
+  public signIn(loginEntity: LoginEntity): Observable<ReqRes> {
+
     return this.http.post<ReqRes>(`${this.baseUrl}/signin`, loginEntity);
   }
 

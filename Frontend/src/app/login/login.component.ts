@@ -26,15 +26,8 @@ import { log } from 'console';
 export class LoginComponent {
   @Output() dataEvent = new EventEmitter<string>();
   loginForm: FormGroup;
-  vorname: any;
-  nachname: any;
-  benutzername: any;
-  email: any;
-  passwort: any;
   token: any;
   bild: any;
-  ok = false;
-
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -50,11 +43,9 @@ export class LoginComponent {
 
   test() {
     if (this.loginForm.valid) {
-      console.log(this.loginForm.value)
-      const login: ReqRes = this.loginForm.value;
+      const login: LoginEntity = new LoginEntity(this.loginForm.value.email,this.loginForm.value.password);
       this.prodser.signIn(login).subscribe(
       (response: ReqRes) => {
-        console.log(response.token)
         if (response.token) {
           this.token = response.token;
           localStorage.setItem("token", response.token);
