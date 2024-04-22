@@ -30,9 +30,6 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<ReqRes> signIn(@RequestBody ReqRes signInRequest){
        return ResponseEntity.ok(authService.signIn(signInRequest));
-//        Authentication authentication=authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.getEmail(),signInRequest.getPasswort()));
-//        return ResponseEntity.ok(jwtUtils.generateToken((UserDetails) authentication));
-
     }
     @PostMapping("/refresh")
     public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes refreshTokenRequest){
