@@ -28,24 +28,28 @@ public class AuthService {
 
     public ReqRes signUp(ReqRes registrationRequest){
         ReqRes resp = new ReqRes();
-        try {
-            User user = new User();
-            user.setVorname(registrationRequest.getVorname());
-            user.setNachname(registrationRequest.getNachname());
-            user.setBenutzername(registrationRequest.getBenutzername());
-            user.setEmail(registrationRequest.getEmail());
-            user.setPasswort(passwordEncoder.encode(registrationRequest.getPasswort()));
-            user.setRoles(Collections.singletonList(UserRole.ROLE_USER));
-            User ourUserResult = userRepository.save(user);
-            if (ourUserResult != null && ourUserResult.getId()>0) {
-                resp.setUser(ourUserResult);
-                resp.setMessage("User Saved Successfully");
-                resp.setStatusCode(200);
+        if (!userRepository.existsUserByEmail(registrationRequest.getEmail()) && !userRepository.existsUserByBenutzername(registrationRequest.getBenutzername())) {
+            try {
+                System.out.println(userRepository.existsUserByEmail(resp.getEmail()) + " " + userRepository.existsUserByBenutzername(resp.getBenutzername()));
+                User user = new User();
+                user.setVorname(registrationRequest.getVorname());
+                user.setNachname(registrationRequest.getNachname());
+                user.setBenutzername(registrationRequest.getBenutzername());
+                user.setEmail(registrationRequest.getEmail());
+                user.setPasswort(passwordEncoder.encode(registrationRequest.getPasswort()));
+                user.setRoles(Collections.singletonList(UserRole.ROLE_USER));
+                User ourUserResult = userRepository.save(user);
+                if (ourUserResult != null && ourUserResult.getId() > 0) {
+                    resp.setUser(ourUserResult);
+                    resp.setMessage("User Saved Successfully");
+                    resp.setStatusCode(200);
+                }
+
+            } catch (Exception e) {
+                resp.setStatusCode(500);
+                resp.setError(e.getMessage());
             }
-        }catch (Exception e){
-            resp.setStatusCode(500);
-            resp.setError(e.getMessage());
-        }
+        }else {resp.setStatusCode(400); resp.setMessage("User already exists");}
         return resp;
     }
 
@@ -56,7 +60,6 @@ public class AuthService {
 
             var user = userRepository.findByEmail(signingRequest.getEmail());
             if (user != null && passwordEncoder.matches(signingRequest.getPasswort(), user.getPasswort())) {
-                // Das eingegebene Passwort stimmt mit dem Passwort des Benutzers überein
                 var jwt = jwtUtils.generateToken(user);
                 var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), user);
                 response.setStatusCode(200);
@@ -66,7 +69,6 @@ public class AuthService {
                 response.setMessage("Successfully Signed In");
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword()));
             } else {
-                // Das eingegebene Passwort stimmt nicht mit dem Passwort des Benutzers überein
                 response.setStatusCode(401);
                 response.setMessage("Invalid credentials");
             }
