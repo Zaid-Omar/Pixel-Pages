@@ -1,46 +1,43 @@
-import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {LoginEntity} from "../entity/LoginEntity";
-import {ReqRes} from "../entity/ReqRes";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
-import {DomSanitizer} from "@angular/platform-browser";
-import {FormsModule} from "@angular/forms";
-import {User} from "../entity/User";
-import {UserRole} from "../entity/UserRole";
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormGroup } from '@angular/forms';
+import { Component} from '@angular/core';
+import { ApisService } from '../services/apis.service';
+import { ReqRes } from '../entity/ReqRes';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [RouterLink, FormsModule, HttpClientModule],
+  imports: [RouterLink, FormsModule, ReactiveFormsModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
-export class SignupComponent {
-  vorname:any;
-  nachname:any;
-  benutzername: any;
-  email: any;
-  passwort: any;
-  token: any;
-  bild:any;
-  ok=false;
-  constructor(private http: HttpClient) {}
+export class SignupComponent{
+  registerForm: FormGroup;
 
-
-  public signUp(): void {
-    const signUp = new User(0,this.vorname,this.nachname,this.benutzername,this.email,this.passwort,null);
-    console.log(signUp);
-    this.http.post<ReqRes>("http://localhost:8080/api/auth/signup", signUp)
-      .subscribe(
-        (response: ReqRes) => {
-          console.log("tmm abi");
-        },
-        error => {
-          console.error('Fehler bei der Anmeldung:', error);
-        }
-      );
+  constructor( private formBuilder: FormBuilder, private prodser: ApisService) {
+    this.registerForm = this.formBuilder.group({
+      vorname: ['', Validators.required],
+      nachname: ['', Validators.required],
+      benutzername: ['', Validators.required],
+      email: ['', Validators.required],
+      passwort: ['', Validators.required]
+    });
   }
 
+  signUp() {
+    if (this.registerForm.valid) {
+      const offerData: ReqRes = this.registerForm.value;
+      this.prodser.signUp(offerData).subscribe(
+      (response) => {
+        console.log('Anzeige erfolgreich hinzugefügt:', response);
+      },
+      (error) => {
+        console.log('Anzeige war nicht erfolgreich');
+      }
+      )
+    }
+  }
 
-
+  submit() {}
 }

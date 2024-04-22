@@ -27,6 +27,4 @@ export class User  {
     this.roles = roles;
   }
 
-
-  // Implementierung der UserDetails-Methoden hier (falls erforderlich)
 }
