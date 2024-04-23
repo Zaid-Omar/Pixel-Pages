@@ -24,6 +24,7 @@ export class ApisService {
   profilePic$: Observable<string> = this.benutzernameSubject.asObservable();
 
   private baseUrl = 'http://localhost:8080/api/auth';
+  private baseUrluser = 'http://localhost:8080/api/user';
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
   constructor(private http: HttpClient) {}
@@ -52,6 +53,6 @@ export class ApisService {
   }
 
   public getUserByUsername(user: LoginEntity): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/getUserByEmail`, user);
+    return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
   }
 }

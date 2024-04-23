@@ -7,7 +7,7 @@ import { User } from "../entity/User";
 import { Media } from "../entity/MediaEntity";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
-import { Component, Output, EventEmitter } from '@angular/core';
+import {Component, Output, EventEmitter, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import { ApisService } from '../services/apis.service';
 import { log } from 'console';
 
@@ -28,6 +28,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   token: any;
   bild: any;
+  isLoggedIn:boolean = false;
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -47,16 +48,17 @@ export class LoginComponent {
       this.prodser.signIn(login).subscribe(
       (response: ReqRes) => {
         if (response.token) {
-          const isLoggedIn = true;
-          this.prodser.updateLoginRequest(isLoggedIn);
-          localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+          this.isLoggedIn = true;
+          this.prodser.updateLoginRequest(this.isLoggedIn);
+          localStorage.setItem('isLoggedIn', this.isLoggedIn.toString());
           this.token = response.token;
           localStorage.setItem("token", response.token);
-          this.router.navigate(['/']);
-          if (isLoggedIn) {
-            const offer : ReqRes = this.loginForm.value;
+          if (this.isLoggedIn) {
+            const offer : LoginEntity = new LoginEntity(this.loginForm.value.email,this.loginForm.value.password);
+            this.router.navigate(['/']);
             this.prodser.getUserByUsername(offer).subscribe(
             (response: ReqRes) => {
+              console.log(response)
                localStorage.setItem('currentUser', JSON.stringify(response));
                localStorage.setItem('user_id',JSON.stringify(response.id));
                this.prodser.updateSharedData(
@@ -69,6 +71,7 @@ export class LoginComponent {
           })
           }
         } else {
+
           console.log('Anmeldung fehlgeschlagen')
           console.log(this.loginForm.value);
         }
