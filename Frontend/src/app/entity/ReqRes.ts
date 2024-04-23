@@ -1,22 +1,25 @@
 import {UserRole} from "./UserRole";
 import {User} from "./User";
+import { NumberValueAccessor } from "@angular/forms";
 
 export class ReqRes {
-  private statusCode: number;
-  private error: string;
-  private message: string;
+  id: number
+  statusCode: number;
+  error: string;
+  message: string;
   token: string;
-  private refreshToken: string;
-  private expirationTime: string;
-  private vorname: string;
-  private nachname: string;
-  private benutzername: string;
-  private email: string;
-  private passwort: string;
-  private roles: UserRole.USER;
-  private user: string;
+  refreshToken: string;
+  expirationTime: string;
+  vorname: string;
+  nachname: string;
+  benutzername: string;
+  email: string;
+  passwort: string;
+  roles: UserRole.USER;
+  user: string;
 
   constructor(
+    id: number,
     statusCode: number,
     error: string,
     message: string,
@@ -31,6 +34,7 @@ export class ReqRes {
     roles: UserRole.USER,
     user: string
   ) {
+    this.id = id
     this.statusCode = statusCode;
     this.error = error;
     this.message = message;

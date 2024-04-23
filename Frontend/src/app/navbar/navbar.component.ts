@@ -1,16 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
+import { ApisService } from '../services/apis.service';
+import { NgIf } from '@angular/common';
+import { NgModel } from '@angular/forms';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, NgIf],
   templateUrl: './navbar.component.html',
-  styleUrl: './navbar.component.scss'
+  styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
   activeIndex: number = 0;
+  anmeldeboolean: boolean = false;
+  username: any = '';
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private prodser: ApisService) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         switch (event.url) {
@@ -43,4 +49,19 @@ export class NavbarComponent {
   resetActiveIndex() {
     this.activeIndex = -1;
   }
+
+  ngOnInit() {
+    this.prodser.username$.subscribe(username => {
+      this.username = username;
+      console.log(username)
+    });
+    if (typeof localStorage !== 'undefined') {
+      try {
+        this.anmeldeboolean = localStorage.getItem('isLoggedIn') === 'true';
+      } catch (error) {
+        console.error('Error accessing localStorage:', error);
+      }
+    }
+
+}
 }

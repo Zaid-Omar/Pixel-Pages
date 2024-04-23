@@ -47,11 +47,27 @@ export class LoginComponent {
       this.prodser.signIn(login).subscribe(
       (response: ReqRes) => {
         if (response.token) {
+          const isLoggedIn = true;
+          this.prodser.updateLoginRequest(isLoggedIn);
+          localStorage.setItem('isLoggedIn', isLoggedIn.toString());
           this.token = response.token;
           localStorage.setItem("token", response.token);
-          console.log('Token:', response.token);
-          console.log('Anmeldung erfolgreich');
           this.router.navigate(['/']);
+          if (isLoggedIn) {
+            const offer : ReqRes = this.loginForm.value;
+            this.prodser.getUserByUsername(offer).subscribe(
+            (response: ReqRes) => {
+               localStorage.setItem('currentUser', JSON.stringify(response));
+               localStorage.setItem('user_id',JSON.stringify(response.id));
+               this.prodser.updateSharedData(
+                response.vorname,
+                response.nachname,
+                response.email,
+                response.passwort,
+                response.benutzername
+              );
+          })
+          }
         } else {
           console.log('Anmeldung fehlgeschlagen')
           console.log(this.loginForm.value);

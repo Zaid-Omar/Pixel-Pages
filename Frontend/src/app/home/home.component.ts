@@ -1,6 +1,8 @@
 import { Component, NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { ApisService } from '../services/apis.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +10,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-   searchTerm: string = '';
+  message = '';
+  searchTerm: string = '';
   filteredMedia: any[] = [];
   showConfirmationDialog: boolean = false;
   selectedMedia: any;
@@ -87,7 +90,7 @@ export class HomeComponent {
       liked: false
     }
   ];
-  constructor() {
+  constructor(private http: HttpClient, private apisService: ApisService) {
     this.filteredMedia = this.media;
   }
 
@@ -118,6 +121,15 @@ export class HomeComponent {
   like(media: any) {
     media.liked = !media.liked;
   }
+
+  ngOnInit(): void {
+    this.apisService.username$.subscribe(username => {
+      if(username) {
+        this.message = `Hi, ${username}`;
+      }
+    });
+  }
+
 }
 
 @NgModule({
