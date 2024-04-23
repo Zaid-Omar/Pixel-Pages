@@ -33,7 +33,7 @@ public class UserController {
     public ResponseEntity<Optional<User>> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(userService.findById(id));
     }
-    @GetMapping("/getUserByEmail")
+    @PostMapping("/getUserByEmail")
     public ResponseEntity<Optional<User>> getUserByEmail(@RequestBody User user) {
         return ResponseEntity.ok(Optional.ofNullable(userService.findByEmail(user)));
     }
