@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent implements OnInit{
   activeIndex: number = 0;
   anmeldeboolean: boolean = false;
-  username:any;
+  username: string = 'bisher keine Lösung';
 
   constructor(private router: Router, private prodser: ApisService) {
     this.router.events.subscribe((event) => {
@@ -53,10 +53,6 @@ export class NavbarComponent implements OnInit{
   }
 
   ngOnInit() {
-     console.log(this.prodser.updateSharedData)
-     this.username = this.prodser.benutzername$.subscribe(username =>{
-      this.username = username
-     });
       console.log(this.username)
     if (typeof localStorage !== 'undefined') {
       try {

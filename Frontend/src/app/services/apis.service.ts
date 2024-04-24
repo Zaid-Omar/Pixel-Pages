@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { LoginEntity } from '../entity/LoginEntity';
+import { register } from 'node:module';
 
 @Injectable({
   providedIn: 'root',
@@ -39,10 +40,11 @@ export class ApisService {
     this.benutzernameSubject.next(benutzername);
   }
 
-
   updateLoginRequest(status: boolean) {
     this.loginRequestSubject.next(status);
   }
+
+//* ---------------------------  AUTH APIS  ---------------------------- *//
 
   public signIn(loginEntity: LoginEntity): Observable<ReqRes> {
     return this.http.post<ReqRes>(`${this.baseUrl}/signin`, loginEntity);
@@ -52,7 +54,37 @@ export class ApisService {
     return this.http.post<ReqRes>(`${this.baseUrl}/signup`, registerEntity);
   }
 
+  public refresh(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.post<ReqRes>(`${this.baseUrl}/refresh`, registerEntity);
+  }
+
+//* ---------------------------  USER APIS  ---------------------------- *//
+
+  public addUser(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.post<ReqRes>(`${this.baseUrluser}/add`, registerEntity)
+  }
+
+  public getAllUser(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.get<ReqRes>(`${this.baseUrluser}/getAll`)
+  }
+
+  public getUserByID(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.get<ReqRes>(`${this.baseUrluser}/getUserById/${registerEntity.id}`)
+  }
+
   public getUserByUsername(user: ReqRes): Observable<ReqRes> {
     return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
+  }
+
+  // public getUserByBenutzername(user: ReqRes): Observable<ReqRes> {
+  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
+  // }
+
+  // public getUserByUsernameAndEmail(user: ReqRes): Observable<ReqRes> {
+  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user);
+  // }
+
+  public deleteUserByID(user: ReqRes): Observable<ReqRes> {
+    return this.http.delete<ReqRes>(`${this.baseUrluser}/getUserByEmail/${user.id}`);
   }
 }
