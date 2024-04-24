@@ -29,7 +29,6 @@ export class LoginComponent {
   token: any;
   bild: any;
   x: number = 0
-  isLoggedIn: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -44,24 +43,23 @@ export class LoginComponent {
     });
   }
 
-  async test() {
+  test() {
     if (this.loginForm.valid) {
       const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
       this.prodser.signIn(login).subscribe(
         (response: ReqRes) => {
           if (response.token) {
-            window.location.reload();
-            this.isLoggedIn = true;
-            this.prodser.updateLoginRequest(this.isLoggedIn);
-            localStorage.setItem('isLoggedIn', this.isLoggedIn.toString());
+            let isLoggedIn = true;
+            this.prodser.updateLoginRequest(isLoggedIn);
+            localStorage.setItem('isLoggedIn', isLoggedIn.toString());
             this.token = response.token;
             localStorage.setItem("token", response.token);
             this.router.navigate(['/']);
-             if (this.isLoggedIn) {
+
              const offer : ReqRes = this.loginForm.value;
              this.prodser.getUserByUsername(offer).subscribe(
              (response: ReqRes) => {
-                localStorage.setItem('currentUser', JSON.stringify(response));
+              localStorage.setItem('currentUser', JSON.stringify(response));
                localStorage.setItem('user_id',JSON.stringify(response.id));
                 this.prodser.updateSharedData(
                  response.vorname,
@@ -70,6 +68,7 @@ export class LoginComponent {
                  response.passwort,
                  response.benutzername
                );
+               console.log(this.prodser.vornameSubject.getValue())
                console.log(response.vorname,
                  response.nachname,
                  response.email,
@@ -78,7 +77,7 @@ export class LoginComponent {
                response.id)
 
            })
-          }
+
         } else {
           console.log('Anmeldung fehlgeschlagen')
           console.log(this.loginForm.value);

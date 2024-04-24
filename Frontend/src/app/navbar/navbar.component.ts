@@ -3,18 +3,20 @@ import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { ApisService } from '../services/apis.service';
 import { NgIf } from '@angular/common';
 import { NgModel } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterLink, NgIf],
+  imports: [RouterLink, NgIf, CommonModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit{
   activeIndex: number = 0;
   anmeldeboolean: boolean = false;
-  username: any = '';
+  username:any;
 
   constructor(private router: Router, private prodser: ApisService) {
     this.router.events.subscribe((event) => {
@@ -51,10 +53,11 @@ export class NavbarComponent implements OnInit{
   }
 
   ngOnInit() {
-    this.prodser.username$.subscribe(username => {
-      this.username = username;
-      console.log(username)
-    });
+     console.log(this.prodser.updateSharedData)
+     this.username = this.prodser.benutzername$.subscribe(username =>{
+      this.username = username
+     });
+      console.log(this.username)
     if (typeof localStorage !== 'undefined') {
       try {
         this.anmeldeboolean = localStorage.getItem('isLoggedIn') === 'true';

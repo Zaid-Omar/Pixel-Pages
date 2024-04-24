@@ -9,19 +9,19 @@ import { LoginEntity } from '../entity/LoginEntity';
   providedIn: 'root',
 })
 export class ApisService {
-  private loginRequestSubject = new BehaviorSubject<boolean>(false);
-  private vornameSubject = new BehaviorSubject<string>('');
-  private nachnameSubject = new BehaviorSubject<string>('');
-  private emailSubject = new BehaviorSubject<string>('');
-  private passwordSubject = new BehaviorSubject<string>('');
-  private benutzernameSubject = new BehaviorSubject<string>('');
+   loginRequestSubject = new BehaviorSubject<boolean>(false);
+   vornameSubject = new BehaviorSubject<string>('');
+   nachnameSubject = new BehaviorSubject<string>('');
+   emailSubject = new BehaviorSubject<string>('');
+   passwordSubject = new BehaviorSubject<string>('');
+   benutzernameSubject = new BehaviorSubject<string>('');
 
   loginRequest$  = this.loginRequestSubject.asObservable();
   username$: Observable<string> = this.vornameSubject.asObservable();
   name$: Observable<string> = this.nachnameSubject.asObservable();
   email$: Observable<string> = this.emailSubject.asObservable();
   password$: Observable<string> = this.passwordSubject.asObservable();
-  profilePic$: Observable<string> = this.benutzernameSubject.asObservable();
+  benutzername$: Observable<string> = this.benutzernameSubject.asObservable();
 
   private baseUrl = 'http://localhost:8080/api/auth';
   private baseUrluser = 'http://localhost:8080/api/user';

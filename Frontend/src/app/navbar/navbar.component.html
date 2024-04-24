@@ -28,7 +28,7 @@
       </button>
       <ng-container *ngIf="anmeldeboolean; else loggedOut">
       <div class="flex md:order-2 space-x-6 md:space-x-0 rtl:space-x-reverse">
-        <span class="text-gray-500 text-sm">Hi, {{username}}</span>
+        <span class="text-gray-500 text-sm">Hi, {{username | async}}</span>
       </div>
     </ng-container>
     <ng-template #loggedOut>
