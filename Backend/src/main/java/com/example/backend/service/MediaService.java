@@ -2,6 +2,7 @@ package com.example.backend.service;
 
 import com.example.backend.entity.Media;
 import com.example.backend.repository.MediaRepository;
+import com.example.backend.repository.ReservierungRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ import java.util.List;
 public class MediaService {
     @Autowired
     MediaRepository mediaRepository;
+
+    @Autowired
+    ReservierungRepository reservierungRepository;
 
     public List<Media> getAllMedia() {
         return mediaRepository.findAll();
@@ -64,6 +68,10 @@ public class MediaService {
     }
 
     public void deleteMedia(Long id) {
+
+        if (reservierungRepository.existsByMediaId(id)){
+            reservierungRepository.deleteByMediaId(id);
+        }
         mediaRepository.deleteById(id);
     }
 
