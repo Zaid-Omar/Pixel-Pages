@@ -51,7 +51,8 @@ export class ApisService {
     return this.http.post<ReqRes>(`${this.baseUrl}/signup`, registerEntity);
   }
 
-  public getUserByUsername(user: LoginEntity): Observable<ReqRes> {
+  public getUserByUsername(user: ReqRes): Observable<ReqRes> {
     return this.http.post<ReqRes>(`${this.baseUrl}/getUserByEmail`, user);
   }
+
 }

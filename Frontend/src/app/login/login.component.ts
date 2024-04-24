@@ -28,6 +28,9 @@ export class LoginComponent {
   loginForm: FormGroup;
   token: any;
   bild: any;
+  x: number = 0
+  isLoggedIn: boolean = false;
+
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -41,32 +44,40 @@ export class LoginComponent {
     });
   }
 
-  test() {
+  async test() {
     if (this.loginForm.valid) {
-      const login: LoginEntity = new LoginEntity(this.loginForm.value.email,this.loginForm.value.password);
+      const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
       this.prodser.signIn(login).subscribe(
-      (response: ReqRes) => {
-        if (response.token) {
-          const isLoggedIn = true;
-          this.prodser.updateLoginRequest(isLoggedIn);
-          localStorage.setItem('isLoggedIn', isLoggedIn.toString());
-          this.token = response.token;
-          localStorage.setItem("token", response.token);
-          this.router.navigate(['/']);
-          if (isLoggedIn) {
-            const offer : ReqRes = this.loginForm.value;
-            this.prodser.getUserByUsername(offer).subscribe(
-            (response: ReqRes) => {
-               localStorage.setItem('currentUser', JSON.stringify(response));
+        (response: ReqRes) => {
+          if (response.token) {
+            window.location.reload();
+            this.isLoggedIn = true;
+            this.prodser.updateLoginRequest(this.isLoggedIn);
+            localStorage.setItem('isLoggedIn', this.isLoggedIn.toString());
+            this.token = response.token;
+            localStorage.setItem("token", response.token);
+            this.router.navigate(['/']);
+             if (this.isLoggedIn) {
+             const offer : ReqRes = this.loginForm.value;
+             this.prodser.getUserByUsername(offer).subscribe(
+             (response: ReqRes) => {
+                localStorage.setItem('currentUser', JSON.stringify(response));
                localStorage.setItem('user_id',JSON.stringify(response.id));
-               this.prodser.updateSharedData(
-                response.vorname,
+                this.prodser.updateSharedData(
+                 response.vorname,
                 response.nachname,
                 response.email,
-                response.passwort,
-                response.benutzername
-              );
-          })
+                 response.passwort,
+                 response.benutzername
+               );
+               console.log(response.vorname,
+                 response.nachname,
+                 response.email,
+                 response.passwort,
+                 response.benutzername,
+               response.id)
+
+           })
           }
         } else {
           console.log('Anmeldung fehlgeschlagen')
@@ -107,4 +118,5 @@ export class LoginComponent {
         }
       );
   }
+
 }
