@@ -53,6 +53,6 @@ export class ApisService {
   }
 
   public getUserByUsername(user: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/getUserByEmail`, user);
+    return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
   }
 }
