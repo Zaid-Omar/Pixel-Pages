@@ -7,7 +7,7 @@ import { User } from "../entity/User";
 import { Media } from "../entity/MediaEntity";
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
-import {Component, Output, EventEmitter, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { ApisService } from '../services/apis.service';
 import { log } from 'console';
 
@@ -28,7 +28,8 @@ export class LoginComponent {
   loginForm: FormGroup;
   token: any;
   bild: any;
-  isLoggedIn:boolean = false;
+  x: number = 0
+
   constructor(
     private http: HttpClient,
     private sanitizer: DomSanitizer,
@@ -44,34 +45,40 @@ export class LoginComponent {
 
   test() {
     if (this.loginForm.valid) {
-      const login: LoginEntity = new LoginEntity(this.loginForm.value.email,this.loginForm.value.password);
+      const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
       this.prodser.signIn(login).subscribe(
-      (response: ReqRes) => {
-        if (response.token) {
-          this.isLoggedIn = true;
-          this.prodser.updateLoginRequest(this.isLoggedIn);
-          localStorage.setItem('isLoggedIn', this.isLoggedIn.toString());
-          this.token = response.token;
-          localStorage.setItem("token", response.token);
-          if (this.isLoggedIn) {
-            const offer : LoginEntity = new LoginEntity(this.loginForm.value.email,this.loginForm.value.password);
+        (response: ReqRes) => {
+          if (response.token) {
+            let isLoggedIn = true;
+            this.prodser.updateLoginRequest(isLoggedIn);
+            localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+            this.token = response.token;
+            localStorage.setItem("token", response.token);
             this.router.navigate(['/']);
-            this.prodser.getUserByUsername(offer).subscribe(
-            (response: ReqRes) => {
-              console.log(response)
-               localStorage.setItem('currentUser', JSON.stringify(response));
+
+             const offer : ReqRes = this.loginForm.value;
+             this.prodser.getUserByUsername(offer).subscribe(
+             (response: ReqRes) => {
+              localStorage.setItem('currentUser', JSON.stringify(response));
                localStorage.setItem('user_id',JSON.stringify(response.id));
-               this.prodser.updateSharedData(
-                response.vorname,
+                this.prodser.updateSharedData(
+                 response.vorname,
                 response.nachname,
                 response.email,
-                response.passwort,
-                response.benutzername
-              );
-          })
-          }
-        } else {
+                 response.passwort,
+                 response.benutzername
+               );
+               console.log(this.prodser.vornameSubject.getValue())
+               console.log(response.vorname,
+                 response.nachname,
+                 response.email,
+                 response.passwort,
+                 response.benutzername,
+               response.id)
 
+           })
+
+        } else {
           console.log('Anmeldung fehlgeschlagen')
           console.log(this.loginForm.value);
         }
@@ -110,4 +117,5 @@ export class LoginComponent {
         }
       );
   }
+
 }

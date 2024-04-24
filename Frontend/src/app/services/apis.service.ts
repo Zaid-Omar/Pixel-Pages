@@ -4,24 +4,25 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { LoginEntity } from '../entity/LoginEntity';
+import { register } from 'node:module';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApisService {
-  private loginRequestSubject = new BehaviorSubject<boolean>(false);
-  private vornameSubject = new BehaviorSubject<string>('');
-  private nachnameSubject = new BehaviorSubject<string>('');
-  private emailSubject = new BehaviorSubject<string>('');
-  private passwordSubject = new BehaviorSubject<string>('');
-  private benutzernameSubject = new BehaviorSubject<string>('');
+   loginRequestSubject = new BehaviorSubject<boolean>(false);
+   vornameSubject = new BehaviorSubject<string>('');
+   nachnameSubject = new BehaviorSubject<string>('');
+   emailSubject = new BehaviorSubject<string>('');
+   passwordSubject = new BehaviorSubject<string>('');
+   benutzernameSubject = new BehaviorSubject<string>('');
 
   loginRequest$  = this.loginRequestSubject.asObservable();
   username$: Observable<string> = this.vornameSubject.asObservable();
   name$: Observable<string> = this.nachnameSubject.asObservable();
   email$: Observable<string> = this.emailSubject.asObservable();
   password$: Observable<string> = this.passwordSubject.asObservable();
-  profilePic$: Observable<string> = this.benutzernameSubject.asObservable();
+  benutzername$: Observable<string> = this.benutzernameSubject.asObservable();
 
   private baseUrl = 'http://localhost:8080/api/auth';
   private baseUrluser = 'http://localhost:8080/api/user';
@@ -39,10 +40,11 @@ export class ApisService {
     this.benutzernameSubject.next(benutzername);
   }
 
-
   updateLoginRequest(status: boolean) {
     this.loginRequestSubject.next(status);
   }
+
+//* ---------------------------  AUTH APIS  ---------------------------- *//
 
   public signIn(loginEntity: LoginEntity): Observable<ReqRes> {
     return this.http.post<ReqRes>(`${this.baseUrl}/signin`, loginEntity);
@@ -52,7 +54,37 @@ export class ApisService {
     return this.http.post<ReqRes>(`${this.baseUrl}/signup`, registerEntity);
   }
 
-  public getUserByUsername(user: LoginEntity): Observable<ReqRes> {
+  public refresh(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.post<ReqRes>(`${this.baseUrl}/refresh`, registerEntity);
+  }
+
+//* ---------------------------  USER APIS  ---------------------------- *//
+
+  public addUser(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.post<ReqRes>(`${this.baseUrluser}/add`, registerEntity)
+  }
+
+  public getAllUser(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.get<ReqRes>(`${this.baseUrluser}/getAll`)
+  }
+
+  public getUserByID(registerEntity: ReqRes): Observable<ReqRes> {
+    return this.http.get<ReqRes>(`${this.baseUrluser}/getUserById/${registerEntity.id}`)
+  }
+
+  public getUserByUsername(user: ReqRes): Observable<ReqRes> {
     return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
+  }
+
+  // public getUserByBenutzername(user: ReqRes): Observable<ReqRes> {
+  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
+  // }
+
+  // public getUserByUsernameAndEmail(user: ReqRes): Observable<ReqRes> {
+  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user);
+  // }
+
+  public deleteUserByID(user: ReqRes): Observable<ReqRes> {
+    return this.http.delete<ReqRes>(`${this.baseUrluser}/getUserByEmail/${user.id}`);
   }
 }
