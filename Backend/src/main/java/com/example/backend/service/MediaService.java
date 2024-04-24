@@ -27,6 +27,10 @@ public class MediaService {
         return mediaRepository.findByTitel(media.getTitel());
     }
 
+    public Media getMediaByIsbn(String isbn) {
+        return mediaRepository.findByIsbn(isbn);
+    }
+
     public Media addMedia(Media media) {
 
         Media newMedia =Media.builder()
@@ -35,6 +39,7 @@ public class MediaService {
                 .typ(media.getTyp())
                 .status(true)
                 .bild(media.getBild())
+                .isbn(media.getIsbn())
                 .build();
 
         return mediaRepository.save(media);
@@ -53,6 +58,7 @@ public class MediaService {
         existingMedia.setAutor(media.getAutor());
         existingMedia.setTyp(media.getTyp());
         existingMedia.setStatus(media.isStatus());
+        existingMedia.setIsbn(media.getIsbn());
         // Speichern des aktualisierten Mediums
         return mediaRepository.save(existingMedia);
     }

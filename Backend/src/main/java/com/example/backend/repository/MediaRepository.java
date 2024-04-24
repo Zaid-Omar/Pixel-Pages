@@ -12,4 +12,5 @@ public interface MediaRepository extends JpaRepository<Media, Long> {
 
     Media findByTitel(String title);
     List<Media> findAllByStatusTrue();
+    Media findByIsbn(String isbn);
 }

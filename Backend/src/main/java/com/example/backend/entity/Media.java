@@ -38,4 +38,7 @@ public class Media
 
     @Column(columnDefinition = "bytea")
     private byte[] bild;
+
+    @Column(unique = true)
+    private String isbn;
 }

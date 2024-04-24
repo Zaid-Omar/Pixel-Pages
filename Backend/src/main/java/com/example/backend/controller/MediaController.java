@@ -33,6 +33,11 @@ public class MediaController {
     @GetMapping("/getById/{id}")
     public ResponseEntity<Media> findById(@PathVariable Long id) {return ResponseEntity.ok(mediaService.getMediaById(id));}
 
+    @GetMapping("/getByIsbn/{isbn}")
+    public ResponseEntity<Media> findByIsbn(@PathVariable String isbn) {
+        return ResponseEntity.ok(mediaService.getMediaByIsbn(isbn));
+    }
+
     @GetMapping("/getByTitle")
     public ResponseEntity<Media> findByTitle(@RequestBody Media media) {return ResponseEntity.ok(mediaService.getMediaByTitle(media));}
 
