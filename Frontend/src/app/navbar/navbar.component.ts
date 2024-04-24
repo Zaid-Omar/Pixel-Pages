@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { ApisService } from '../services/apis.service';
 import { NgIf } from '@angular/common';
@@ -11,7 +11,7 @@ import { NgModel } from '@angular/forms';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit{
   activeIndex: number = 0;
   anmeldeboolean: boolean = false;
   username: any = '';
@@ -58,10 +58,13 @@ export class NavbarComponent implements OnInit {
     if (typeof localStorage !== 'undefined') {
       try {
         this.anmeldeboolean = localStorage.getItem('isLoggedIn') === 'true';
+
       } catch (error) {
         console.error('Error accessing localStorage:', error);
       }
     }
 
 }
+
+
 }
