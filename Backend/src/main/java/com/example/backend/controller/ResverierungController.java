@@ -40,6 +40,4 @@ public class ResverierungController {
     public void delete(@PathVariable Long id) {
         reservierungService.delete(id);
     }
-
-
 }
