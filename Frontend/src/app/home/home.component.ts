@@ -76,19 +76,6 @@ export class HomeComponent implements OnInit {
       }
     );
   }
-  base64EncodeImage(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        const base64String = (reader.result as string).split(',')[1];
-        resolve(base64String);
-      };
-      reader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  }
 }
 
 
