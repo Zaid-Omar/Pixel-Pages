@@ -31,7 +31,6 @@ export class BuchungenComponent {
   ];
 
   searchBooks() {
-    // Beispiel-Implementierung für die Buchsuche
     if (this.searchTerm.trim() === "") {
       this.bookings = [
         {

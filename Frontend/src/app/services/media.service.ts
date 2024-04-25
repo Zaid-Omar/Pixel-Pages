@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { ReqRes } from '../entity/ReqRes';
 import { Observable } from 'rxjs';
+import { Media } from '../entity/MediaEntity';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class MediaService {
 
   //* ---------------------------  MEDIA APIS  ---------------------------- *//
 
-  public getAllMedia(): Observable<ReqRes> {
-    return this.http.get<ReqRes>(`${this.baseUrl}/getAll`);
+  public getAllMedia(): Observable<Media> {
+    return this.http.get<Media>(`${this.baseUrl}/getAll`);
   }
 
   public getAllStatusTrueMedia(): Observable<ReqRes> {
