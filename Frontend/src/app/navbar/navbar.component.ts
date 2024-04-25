@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent implements OnInit{
   activeIndex: number = 0;
   anmeldeboolean: boolean = false;
-  username: string = 'bisher keine Lösung';
+  username: string = '';
 
   constructor(private router: Router, private prodser: ApisService) {
     this.router.events.subscribe((event) => {
@@ -52,18 +52,34 @@ export class NavbarComponent implements OnInit{
     this.activeIndex = -1;
   }
 
+  abmelden() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('token');
+    window.location.reload();
+  }
+
   ngOnInit() {
-      console.log(this.username)
     if (typeof localStorage !== 'undefined') {
-      try {
-        this.anmeldeboolean = localStorage.getItem('isLoggedIn') === 'true';
-
-      } catch (error) {
-        console.error('Error accessing localStorage:', error);
+      const currentUserDataString = localStorage.getItem('currentUser');
+      if (currentUserDataString) {
+        const currentUserData = JSON.parse(currentUserDataString);
+        this.username = currentUserData.benutzername;
+      } else {
+        console.log('Der currentUser-Schlüssel wurde im localStorage nicht gefunden.');
       }
-    }
 
-}
+      const login = localStorage.getItem('isLoggedIn');
+      if (login) {
+        this.anmeldeboolean = true;
+      } else {
+        this.anmeldeboolean = false;
+      }
+    } else {
+    }
+  }
+
 
 
 }

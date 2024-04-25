@@ -10,6 +10,7 @@ import { FormGroup } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ApisService } from '../services/apis.service';
 import { log } from 'console';
+import { NavbarComponent } from '../navbar/navbar.component';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +29,7 @@ export class LoginComponent {
   loginForm: FormGroup;
   token: any;
   bild: any;
+  benutzername: string = '';
   x: number = 0
 
   constructor(
@@ -35,7 +37,8 @@ export class LoginComponent {
     private sanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
     private router: Router,
-    private prodser: ApisService
+    private prodser: ApisService,
+    private navbar: NavbarComponent
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', Validators.required],
@@ -49,45 +52,42 @@ export class LoginComponent {
       this.prodser.signIn(login).subscribe(
         (response: ReqRes) => {
           if (response.token) {
-            let isLoggedIn = true;
-            this.prodser.updateLoginRequest(isLoggedIn);
-            localStorage.setItem('isLoggedIn', isLoggedIn.toString());
-            this.token = response.token;
-            localStorage.setItem("token", response.token);
+            // Navigation zur Startseite
             this.router.navigate(['/']);
 
-             const offer : ReqRes = this.loginForm.value;
-             this.prodser.getUserByUsername(offer).subscribe(
-             (response: ReqRes) => {
-              localStorage.setItem('currentUser', JSON.stringify(response));
-               localStorage.setItem('user_id',JSON.stringify(response.id));
+            // Setzen der localStorage-Einträge
+            let isLoggedIn = true;
+            localStorage.setItem('isLoggedIn', isLoggedIn.toString());
+            localStorage.setItem('token', response.token);
+
+
+            // Abrufen und Setzen der aktuellen Benutzerdaten
+            const offer: ReqRes = this.loginForm.value;
+            this.prodser.getUserByUsername(offer).subscribe(
+              (userData: ReqRes) => {
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                localStorage.setItem('user_id', JSON.stringify(userData.id));
                 this.prodser.updateSharedData(
-                 response.vorname,
-                response.nachname,
-                response.email,
-                 response.passwort,
-                 response.benutzername
-               );
-               console.log(this.prodser.vornameSubject.getValue())
-               console.log(response.vorname,
-                 response.nachname,
-                 response.email,
-                 response.passwort,
-                 response.benutzername,
-               response.id)
+                  userData.vorname,
+                  userData.nachname,
+                  userData.email,
+                  userData.passwort,
+                  userData.benutzername
+                );
+              }
+            );
 
-           })
-
-        } else {
-          console.log('Anmeldung fehlgeschlagen')
-          console.log(this.loginForm.value);
+          } else {
+            console.log('Anmeldung fehlgeschlagen');
+            console.log(this.loginForm.value);
+          }
+        },
+        error => {
+          console.error('Fehler bei der Anmeldung:', error);
         }
-      },
-      error => {
-        console.error('Fehler bei der Anmeldung:', error);
-      }
-    );
-}}
+      );
+    }
+  }
 
 
   public getAllUsers() {
