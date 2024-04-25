@@ -5,6 +5,9 @@ import { HttpClient } from '@angular/common/http';
 import { ApisService } from '../services/apis.service';
 import { Media } from '../entity/MediaEntity';
 import { MediaService } from '../services/media.service';
+import { Observable } from 'rxjs';
+import { ReservierungService } from '../services/reservierung.service';
+import { Reservierung } from '../entity/ReservierungsEntity';
 
 @Component({
   selector: 'app-home',
@@ -17,9 +20,10 @@ export class HomeComponent implements OnInit {
   filteredMedia: any[] = [];
   showConfirmationDialog: boolean = false;
   selectedMedia: any;
+  mediaLikes: { [key: number]: boolean } = {};
   media: Media[] = [];
 
-  constructor(private http: HttpClient, private apisService: ApisService, private mediaService: MediaService) {
+  constructor(private http: HttpClient, private apisService: ApisService, private mediaService: MediaService, private resService: ReservierungService) {
   }
 
   ngOnInit() {
@@ -52,8 +56,27 @@ export class HomeComponent implements OnInit {
     this.userLeihtAus();
   }
 
-  like(media: any) {
-    media.liked = !media.liked;
+  like(media: Media) {
+    this.mediaLikes[media.id] = !this.mediaLikes[media.id];
+    if (this.mediaLikes[media.id]) {
+      const user_id = this.getCurrentUserId();
+      const media_id = media.id;
+      const mediares: Reservierung = {
+        user: user_id ,
+        media: media_id
+      };
+      console.log('Sending reservation:', mediares);
+
+      this.resService.addReservierung(mediares)
+        .subscribe({
+          next: (res) => console.log('Reservierung erfolgreich:', res),
+          error: (err) => console.error('Fehler bei der Reservierung:', err)
+        });
+    }
+  }
+
+  getCurrentUserId(): string {
+    return localStorage.getItem('user_id') || '';
   }
 
   userLeihtAus() {

@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ReqRes } from '../entity/ReqRes';
+import { Reservierung } from '../entity/ReservierungsEntity';
 
 @Injectable({
   providedIn: 'root'
@@ -25,8 +26,8 @@ export class ReservierungService {
     return this.http.get<ReqRes>(`${this.baseUrl}/getByUser`);
   }
 
-  public addReseervierung(resv: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/add`, resv);
+  public addReservierung(resv: Reservierung): Observable<Reservierung> {
+    return this.http.post<Reservierung>(`${this.baseUrl}/add`, resv);
   }
 
   public updateReservierung (resv: ReqRes): Observable<ReqRes> {
