@@ -6,18 +6,19 @@ import { BehaviorSubject } from 'rxjs';
 import { LoginEntity } from '../entity/LoginEntity';
 import { register } from 'node:module';
 
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApisService {
-   loginRequestSubject = new BehaviorSubject<boolean>(false);
-   vornameSubject = new BehaviorSubject<string>('');
-   nachnameSubject = new BehaviorSubject<string>('');
-   emailSubject = new BehaviorSubject<string>('');
-   passwordSubject = new BehaviorSubject<string>('');
-   benutzernameSubject = new BehaviorSubject<string>('');
+  loginRequestSubject = new BehaviorSubject<boolean>(false);
+  vornameSubject = new BehaviorSubject<string>('');
+  nachnameSubject = new BehaviorSubject<string>('');
+  emailSubject = new BehaviorSubject<string>('');
+  passwordSubject = new BehaviorSubject<string>('');
+  benutzernameSubject = new BehaviorSubject<string>('');
 
-  loginRequest$  = this.loginRequestSubject.asObservable();
+  loginRequest$ = this.loginRequestSubject.asObservable();
   username$: Observable<string> = this.vornameSubject.asObservable();
   name$: Observable<string> = this.nachnameSubject.asObservable();
   email$: Observable<string> = this.emailSubject.asObservable();
@@ -26,17 +27,30 @@ export class ApisService {
 
   private baseUrl = 'http://localhost:8080/api/auth';
   private baseUrluser = 'http://localhost:8080/api/user';
-  headers = new HttpHeaders({
-    'Authorization': `Bearer ${localStorage.getItem("token")}`
-  });
-  options = { headers: this.headers };
+  private headers: HttpHeaders = new HttpHeaders();
+  options: { headers: HttpHeaders } = { headers: this.headers };
 
+  constructor(private http: HttpClient) {
+    this.initializeHeaders();
+  }
 
-
-
-  constructor(private http: HttpClient) {}
-
-
+  private initializeHeaders(): void {
+    if (typeof localStorage !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+      } else {
+        this.headers = new HttpHeaders();
+      }
+    } else {
+      console.error('localStorage is not available.');
+      // Fallback: Setze leere HttpHeaders
+      this.headers = new HttpHeaders();
+    }
+    this.options = { headers: this.headers };
+  }
 
   updateSharedData(vorname: string, nachname: string, email: string, password: string, benutzername: string) {
     this.vornameSubject.next(vorname);
@@ -78,7 +92,7 @@ export class ApisService {
     return this.http.get<ReqRes>(`${this.baseUrluser}/getUserById/${registerEntity.id}`, this.options)
   }
 
-  public getUserByUsername(user: ReqRes): Observable<ReqRes> {
+  public getUserByUsername(user: LoginEntity): Observable<ReqRes> {
     return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user, this.options);
   }
 

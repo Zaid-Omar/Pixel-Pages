@@ -62,7 +62,7 @@ export class LoginComponent {
 
 
             // Abrufen und Setzen der aktuellen Benutzerdaten
-            const offer: ReqRes = this.loginForm.value;
+            const offer: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
             this.prodser.getUserByUsername(offer).subscribe(
               (userData: ReqRes) => {
                 localStorage.setItem('currentUser', JSON.stringify(userData));

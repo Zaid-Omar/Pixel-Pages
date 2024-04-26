@@ -10,14 +10,30 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class ReservierungService {
   private baseUrl = 'http://localhost:8080/api/reservierung';
-  headers = new HttpHeaders({
-    'Authorization': `Bearer ${localStorage.getItem("token")}`
-  });
-  options = { headers: this.headers };
+  private headers: HttpHeaders = new HttpHeaders();
+  options: { headers: HttpHeaders } = { headers: this.headers };
 
+  constructor(private http: HttpClient) {
+    this.initializeHeaders();
+  }
 
-  constructor(private http: HttpClient) { }
-
+  private initializeHeaders(): void {
+    if (typeof localStorage !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+      } else {
+        this.headers = new HttpHeaders();
+      }
+    } else {
+      console.error('localStorage is not available.');
+      // Fallback: Setze leere HttpHeaders
+      this.headers = new HttpHeaders();
+    }
+    this.options = { headers: this.headers };
+  }
 //* ---------------------------  Reservierung APIS  ---------------------------- *//
 
   public getAllReservierung(): Observable<ReqRes> {
