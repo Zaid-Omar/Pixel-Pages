@@ -1,16 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ReqRes } from "../entity/ReqRes";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-import { LoginEntity } from '../entity/LoginEntity';
-import { register } from 'node:module';
+import {Injectable, OnInit} from '@angular/core';
+import {ReqRes} from "../entity/ReqRes";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {LoginEntity} from '../entity/LoginEntity';
 
 
 @Injectable({
   providedIn: 'root',
 })
-export class ApisService {
+export class ApisService implements OnInit{
   loginRequestSubject = new BehaviorSubject<boolean>(false);
   vornameSubject = new BehaviorSubject<string>('');
   nachnameSubject = new BehaviorSubject<string>('');
@@ -27,15 +25,18 @@ export class ApisService {
 
   private baseUrl = 'http://localhost:8080/api/auth';
   private baseUrluser = 'http://localhost:8080/api/user';
-  private headers: HttpHeaders = new HttpHeaders();
+   headers: HttpHeaders = new HttpHeaders();
   options: { headers: HttpHeaders } = { headers: this.headers };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
     this.initializeHeaders();
   }
 
-  private initializeHeaders(): void {
+   initializeHeaders(): void {
     if (typeof localStorage !== 'undefined') {
+      console.log('localStorage is not available.');
       const token = localStorage.getItem('token');
       if (token) {
         this.headers = new HttpHeaders({
@@ -81,18 +82,22 @@ export class ApisService {
 //* ---------------------------  USER APIS  ---------------------------- *//
 
   public addUser(registerEntity: ReqRes): Observable<ReqRes> {
+    this.initializeHeaders();
     return this.http.post<ReqRes>(`${this.baseUrluser}/add`, registerEntity, this.options)
   }
 
   public getAllUser(registerEntity: ReqRes): Observable<ReqRes> {
+    this.initializeHeaders();
     return this.http.get<ReqRes>(`${this.baseUrluser}/getAll`, this.options)
   }
 
   public getUserByID(registerEntity: ReqRes): Observable<ReqRes> {
+    this.initializeHeaders();
     return this.http.get<ReqRes>(`${this.baseUrluser}/getUserById/${registerEntity.id}`, this.options)
   }
 
   public getUserByUsername(user: LoginEntity): Observable<ReqRes> {
+    this.initializeHeaders();
     return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user, this.options);
   }
 
@@ -105,6 +110,7 @@ export class ApisService {
   // }
 
   public deleteUserByID(user: ReqRes): Observable<ReqRes> {
+    this.initializeHeaders();
     return this.http.delete<ReqRes>(`${this.baseUrluser}/getUserByEmail/${user.id}`, this.options);
   }
 }
