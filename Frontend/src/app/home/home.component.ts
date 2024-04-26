@@ -73,14 +73,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getCurrentUserId(): number {
-    const userIdString: string | null = localStorage.getItem('user_id');
-    if (userIdString !== null) {
-      const userId: number = parseInt(userIdString, 10);
-      return userId;
-    } else {
-      throw new Error("User ID not found in localStorage");
-    }}
+  getCurrentUserId(): any {
+    if (typeof localStorage !== 'undefined') {
+      const userIdString: string | null = localStorage.getItem('user_id');
+      if (userIdString !== null) {
+        const userId: number = parseInt(userIdString, 10);
+        return userId;
+      } else {
+        throw new Error("User ID not found in localStorage");
+    }}}
 
   userLeihtAus() {
     const userId = localStorage.getItem('user_id');

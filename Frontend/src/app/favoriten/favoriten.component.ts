@@ -24,13 +24,14 @@ export class FavoritenComponent implements OnInit{
   }
 
   getCurrentUserId(): any {
-    const userIdString: string | null = localStorage.getItem('user_id');
+    if (typeof localStorage !== 'undefined') {
+      const userIdString: string | null = localStorage.getItem('user_id');
     if (userIdString !== null) {
       const userId: number = parseInt(userIdString, 10);
       return userId;
     } else {
       throw new Error("User ID not found in localStorage");
-    }}
+    }}}
 
   getAllFavorits() {
     const user_id = this.getCurrentUserId();

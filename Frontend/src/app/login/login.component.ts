@@ -52,16 +52,12 @@ export class LoginComponent {
       this.prodser.signIn(login).subscribe(
         (response: ReqRes) => {
           if (response.token) {
-            // Navigation zur Startseite
             this.router.navigate(['/']);
 
-            // Setzen der localStorage-Einträge
             let isLoggedIn = true;
             localStorage.setItem('isLoggedIn', isLoggedIn.toString());
             localStorage.setItem('token', response.token);
 
-
-            // Abrufen und Setzen der aktuellen Benutzerdaten
             let offer: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
             console.log(offer)
             this.prodser.getUserByUsername(offer).subscribe(

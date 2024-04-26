@@ -5,6 +5,7 @@ import { BuchungenComponent } from './buchungen/buchungen.component';
 import { FavoritenComponent } from './favoriten/favoriten.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
+import { UsersettingsComponent } from './usersettings/usersettings.component';
 
 
 export const routes: Routes = [
@@ -25,5 +26,8 @@ export const routes: Routes = [
   },
   {
     'path': 'login', component:LoginComponent
+  },
+  {
+    'path': 'einstellungen', component:UsersettingsComponent
   }
 ];
