@@ -40,8 +40,7 @@ export class MediaService implements OnInit{
   //* ---------------------------  MEDIA APIS  ---------------------------- *//
 
   public getAllMedia(): Observable<Media> {
-    this.initializeHeaders();
-    return this.http.get<Media>(`${this.baseUrl}/getAll`, this.options);
+    return this.http.get<Media>(`${this.baseUrl}/getAll`);
   }
 
   public getAllStatusTrueMedia(): Observable<ReqRes> {

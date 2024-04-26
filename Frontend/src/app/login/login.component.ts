@@ -11,6 +11,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { ApisService } from '../services/apis.service';
 import { log } from 'console';
 import { NavbarComponent } from '../navbar/navbar.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -27,6 +29,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 export class LoginComponent {
   @Output() dataEvent = new EventEmitter<string>();
   loginForm: FormGroup;
+  isSubmitted = false;
   token: any;
   bild: any;
   benutzername: string = '';
@@ -41,12 +44,12 @@ export class LoginComponent {
     private navbar: NavbarComponent
   ) {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      passwort: ['', Validators.required]
     });
   }
 
-  test() {
+  login() {
     if (this.loginForm.valid) {
       const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
       this.prodser.signIn(login).subscribe(
