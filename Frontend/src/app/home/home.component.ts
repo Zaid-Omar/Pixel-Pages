@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getAllMedia();  // Fetch the media list when the component initializes
+    this.getAllMedia();
   }
 
   searchMedia() {
@@ -61,9 +61,8 @@ export class HomeComponent implements OnInit {
     if (this.mediaLikes[media.id]) {
       const user_id = this.getCurrentUserId();
       const media_id = media.id;
-      const mediares: Reservierung = {
-        user: user_id ,
-        media: media_id
+      const mediares: Reservierung = {user:{id: user_id},
+         media:{id: media_id}
       };
       console.log('Sending reservation:', mediares);
       this.resService.addReservierung(mediares)
@@ -74,10 +73,14 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getCurrentUserId(): any {
-    const myNumber: any = parseInt(localStorage?.getItem('user_id')); // Using parseInt
-    return myNumber;
-  }
+  getCurrentUserId(): number {
+    const userIdString: string | null = localStorage.getItem('user_id');
+    if (userIdString !== null) {
+      const userId: number = parseInt(userIdString, 10);
+      return userId;
+    } else {
+      throw new Error("User ID not found in localStorage");
+    }}
 
   userLeihtAus() {
     const userId = localStorage.getItem('user_id');
