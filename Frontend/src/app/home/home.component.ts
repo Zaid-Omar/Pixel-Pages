@@ -66,7 +66,6 @@ export class HomeComponent implements OnInit {
         media: media_id
       };
       console.log('Sending reservation:', mediares);
-
       this.resService.addReservierung(mediares)
         .subscribe({
           next: (res) => console.log('Reservierung erfolgreich:', res),
@@ -75,8 +74,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  getCurrentUserId(): string {
-    return localStorage.getItem('user_id') || '';
+  getCurrentUserId(): any {
+    const myNumber: any = parseInt(localStorage?.getItem('user_id')); // Using parseInt
+    return myNumber;
   }
 
   userLeihtAus() {

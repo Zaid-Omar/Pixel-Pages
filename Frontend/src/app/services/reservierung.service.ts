@@ -1,20 +1,26 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ReqRes } from '../entity/ReqRes';
+import { Component, NgModule } from '@angular/core';
+
 import { Reservierung } from '../entity/ReservierungsEntity';
 import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReservierungService {
+export class ReservierungService implements OnInit {
   private baseUrl = 'http://localhost:8080/api/reservierung';
   private headers: HttpHeaders = new HttpHeaders();
   options: { headers: HttpHeaders } = { headers: this.headers };
 
   constructor(private http: HttpClient) {
     this.initializeHeaders();
+  }
+
+  ngOnInit() {
+    this.getAllReservierung();  // Fetch the media list when the component initializes
   }
 
   private initializeHeaders(): void {
