@@ -51,7 +51,7 @@ export class LoginComponent {
 
   login() {
     if (this.loginForm.valid) {
-      const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
+      const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.passwort);
       this.prodser.signIn(login).subscribe(
         (response: ReqRes) => {
           if (response.token) {
