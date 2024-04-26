@@ -6,6 +6,8 @@ import { Component, NgModule } from '@angular/core';
 
 import { Reservierung } from '../entity/ReservierungsEntity';
 import { HttpHeaders } from '@angular/common/http';
+import { FavoriteEntity } from '../entity/FavoriteEntity';
+import { idEntity } from '../entity/idEntity';
 
 @Injectable({
   providedIn: 'root'
@@ -42,19 +44,19 @@ export class ReservierungService implements OnInit {
   }
 //* ---------------------------  Reservierung APIS  ---------------------------- *//
 
-  public getAllReservierung(): Observable<ReqRes> {
+  public getAllReservierung(): Observable<FavoriteEntity> {
     this.initializeHeaders();
-    return this.http.get<ReqRes>(`${this.baseUrl}/getAll`, this.options);
+    return this.http.get<FavoriteEntity>(`${this.baseUrl}/getAll`, this.options);
   }
 
-  public getByIdReservierung(resv: ReqRes): Observable<ReqRes> {
+  public getByIdReservierung(resv: FavoriteEntity): Observable<FavoriteEntity> {
     this.initializeHeaders();
-    return this.http.get<ReqRes>(`${this.baseUrl}/getById/${resv}`, this.options);
+    return this.http.get<FavoriteEntity>(`${this.baseUrl}/getById/${resv}`, this.options);
   }
 
-  public getByUserReservierung(): Observable<ReqRes> {
+  public getByUserReservierung(): Observable<FavoriteEntity> {
     this.initializeHeaders();
-    return this.http.get<ReqRes>(`${this.baseUrl}/getByUser`, this.options);
+    return this.http.get<FavoriteEntity>(`${this.baseUrl}/getByUser`, this.options);
   }
 
   public addReservierung(resv: Reservierung): Observable<Reservierung> {
