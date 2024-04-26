@@ -50,6 +50,7 @@ export class LoginComponent {
   }
 
   login() {
+    this.isSubmitted = true;
     if (this.loginForm.valid) {
       const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.passwort);
       this.prodser.signIn(login).subscribe(
