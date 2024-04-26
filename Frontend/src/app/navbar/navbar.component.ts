@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef} from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { ApisService } from '../services/apis.service';
 import { NgIf } from '@angular/common';
@@ -18,7 +18,7 @@ export class NavbarComponent implements OnInit{
   anmeldeboolean: boolean = false;
   username: string = '';
 
-  constructor(private router: Router, private prodser: ApisService) {
+  constructor(private router: Router, private prodser: ApisService, private cdr: ChangeDetectorRef) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         switch (event.url) {
