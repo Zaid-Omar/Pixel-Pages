@@ -26,8 +26,8 @@ public class ReservierungService {
     public Reservierung findById(Long id) {
         return reservierungRepository.findById(id).orElse(null);
     }
-    public Reservierung findByUser(User user) {
-         return reservierungRepository.findByUser(user);
+    public List<Reservierung> findByUser(Long id) {
+         return reservierungRepository.getReservierungByUserId(id);
     }
 
     public Reservierung add(Reservierung reservierung) {
