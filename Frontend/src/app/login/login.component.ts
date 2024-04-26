@@ -63,8 +63,10 @@ export class LoginComponent {
 
             // Abrufen und Setzen der aktuellen Benutzerdaten
             const offer: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
+            console.log(offer)
             this.prodser.getUserByUsername(offer).subscribe(
               (userData: ReqRes) => {
+                console.log(userData)
                 localStorage.setItem('currentUser', JSON.stringify(userData));
                 localStorage.setItem('user_id', JSON.stringify(userData.id));
                 this.prodser.updateSharedData(
@@ -74,6 +76,7 @@ export class LoginComponent {
                   userData.passwort,
                   userData.benutzername
                 );
+                console.log(this.prodser.updateSharedData)
               }
             );
 
