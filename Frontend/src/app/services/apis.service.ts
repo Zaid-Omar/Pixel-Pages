@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ReqRes } from "../entity/ReqRes";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { LoginEntity } from '../entity/LoginEntity';
+import { register } from 'node:module';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApisService {
-  loginRequestSubject = new BehaviorSubject<boolean>(false);
-  vornameSubject = new BehaviorSubject<string>('');
-  nachnameSubject = new BehaviorSubject<string>('');
-  emailSubject = new BehaviorSubject<string>('');
-  passwordSubject = new BehaviorSubject<string>('');
-  benutzernameSubject = new BehaviorSubject<string>('');
+   loginRequestSubject = new BehaviorSubject<boolean>(false);
+   vornameSubject = new BehaviorSubject<string>('');
+   nachnameSubject = new BehaviorSubject<string>('');
+   emailSubject = new BehaviorSubject<string>('');
+   passwordSubject = new BehaviorSubject<string>('');
+   benutzernameSubject = new BehaviorSubject<string>('');
 
   loginRequest$  = this.loginRequestSubject.asObservable();
   username$: Observable<string> = this.vornameSubject.asObservable();
@@ -24,15 +26,15 @@ export class ApisService {
 
   private baseUrl = 'http://localhost:8080/api/auth';
   private baseUrluser = 'http://localhost:8080/api/user';
+  headers = new HttpHeaders({
+    'Authorization': `Bearer ${localStorage.getItem("token")}`
+  });
+  options = { headers: this.headers };
+
+
+
 
   constructor(private http: HttpClient) {}
-
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem("token");
-    return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
-  }
 
 
 
@@ -48,17 +50,18 @@ export class ApisService {
     this.loginRequestSubject.next(status);
   }
 
+//* ---------------------------  AUTH APIS  ---------------------------- *//
 
   public signIn(loginEntity: LoginEntity): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/signin`, loginEntity, this.getHeaders());
+    return this.http.post<ReqRes>(`${this.baseUrl}/signin`, loginEntity);
   }
 
   public signUp(registerEntity: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/signup`, registerEntity, this.options);
+    return this.http.post<ReqRes>(`${this.baseUrl}/signup`, registerEntity);
   }
 
   public refresh(registerEntity: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrl}/refresh`, registerEntity, this.options);
+    return this.http.post<ReqRes>(`${this.baseUrl}/refresh`, registerEntity);
   }
 
 //* ---------------------------  USER APIS  ---------------------------- *//
