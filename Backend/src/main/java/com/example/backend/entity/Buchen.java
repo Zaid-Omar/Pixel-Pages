@@ -33,5 +33,6 @@ public class Buchen {
         @Column
         private Date ab_datum;
 
-
+        @Column
+        private Double gebuehren=0.0;
 }

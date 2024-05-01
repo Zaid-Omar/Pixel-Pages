@@ -8,9 +8,11 @@ import com.example.backend.repository.BuchenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BuchenService {
@@ -55,6 +57,15 @@ public class BuchenService {
         buchenRepository.deleteById(id);
     }
 
+    public Buchen updateBuchen(Long id, Date tatsaechlichesRueckgabeDatum) {
+        Buchen vorhandeneBuchen = buchenRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Buchung nicht gefunden."));
+        double gebuehren = berechneGebuehren(vorhandeneBuchen.getAb_datum(), tatsaechlichesRueckgabeDatum);
+        vorhandeneBuchen.setGebuehren(gebuehren);
+
+        return buchenRepository.save(vorhandeneBuchen);
+    }
+
+
     private Date getDateWithoutTime() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -64,5 +75,14 @@ public class BuchenService {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
+    }
+
+    private double berechneGebuehren (Date rueckgabeDatum, Date heute) {
+        if (rueckgabeDatum.before(heute)) {
+            long differenz = heute.getTime() - rueckgabeDatum.getTime();
+            long tageUeberfaellig = TimeUnit.MILLISECONDS.toDays(differenz);
+            return tageUeberfaellig * 5.0;  // 5€ pro Tag Verspätung
+        }
+        return 0.0;
     }
 }

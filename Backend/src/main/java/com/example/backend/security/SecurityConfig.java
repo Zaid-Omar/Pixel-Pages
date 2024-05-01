@@ -3,6 +3,7 @@ package com.example.backend.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -33,9 +34,8 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.PUT,"/api/user/updateUser","/api/media/updateMedia").hasRole("ADMIN")
                         .requestMatchers("/api/auth/signin","/api/auth/signup","api/media/getAll").permitAll()
-                        .requestMatchers("/api/user/updateUser").hasRole("ADMIN")
-                        .requestMatchers("/api/media/updateMedia").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
