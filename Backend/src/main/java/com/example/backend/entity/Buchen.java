@@ -1,10 +1,8 @@
 package com.example.backend.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 import java.util.Date;
 
 
@@ -28,11 +26,14 @@ public class Buchen {
         @JoinColumn(name = "media_id", referencedColumnName = "id")
         private Media media;
 
+        @Temporal(TemporalType.DATE)  // Speichert nur das Datum, nicht die Zeit
         @Column
         private Date aus_datum;
+
+        @Temporal(TemporalType.DATE)  // Speichert nur das Datum, nicht die Zeit
         @Column
         private Date ab_datum;
 
         @Column
-        private Double gebuehren=0.0;
+        private Double gebuehren = 0.0;
 }

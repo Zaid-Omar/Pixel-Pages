@@ -4,13 +4,10 @@ package com.example.backend.controller;
 import com.example.backend.entity.Buchen;
 import com.example.backend.service.BuchenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @CrossOrigin
@@ -38,8 +35,9 @@ public class BuchenController {
         return ResponseEntity.ok(buchenService.saveBuchen(buchen));
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Buchen> updateBuchen(@PathVariable Long id, @RequestBody Date rueckgabeDatum) {
-        return ResponseEntity.ok(buchenService.updateBuchen(id, rueckgabeDatum));
+    public ResponseEntity<Buchen> updateBuchen(@PathVariable Long id) {
+
+        return ResponseEntity.ok(buchenService.updateBuchen(id));
     }
 
     @DeleteMapping("/deleteById/{id}")
