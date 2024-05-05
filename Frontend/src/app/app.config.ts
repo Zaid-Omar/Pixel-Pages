@@ -8,7 +8,6 @@ import { NavbarComponent } from './navbar/navbar.component';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideRouter(routes), provideClientHydration(),
-    provideToastr(),provideHttpClient(),
-    NavbarComponent
+    provideToastr(), provideHttpClient()
   ]
 };

@@ -4,6 +4,11 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SignupComponent } from './signup/signup.component';
+import { provideAnimations } from '@angular/platform-browser/animations';
+
+import { provideToastr } from 'ngx-toastr';
+
+
 
 @Component({
   selector: 'app-root',
@@ -14,4 +19,5 @@ import { SignupComponent } from './signup/signup.component';
 })
 export class AppComponent {
   title = 'Pixel Pages';
+
 }

@@ -5,6 +5,7 @@ import { Component} from '@angular/core';
 import { ApisService } from '../services/apis.service';
 import { ReqRes } from '../entity/ReqRes';
 import { CommonModule } from '@angular/common';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-signup',

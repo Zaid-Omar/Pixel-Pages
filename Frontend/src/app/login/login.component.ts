@@ -5,13 +5,11 @@ import { LoginEntity } from "../entity/LoginEntity";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
 import { User } from "../entity/User";
 import { Media } from "../entity/MediaEntity";
-import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ApisService } from '../services/apis.service';
-import { log } from 'console';
-import { NavbarComponent } from '../navbar/navbar.component';
 import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-login',
@@ -37,11 +35,9 @@ export class LoginComponent {
 
   constructor(
     private http: HttpClient,
-    private sanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
     private router: Router,
     private prodser: ApisService,
-    private navbar: NavbarComponent
   ) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
