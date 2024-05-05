@@ -8,9 +8,12 @@ import com.example.backend.repository.BuchenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class BuchenService {
@@ -55,6 +58,25 @@ public class BuchenService {
         buchenRepository.deleteById(id);
     }
 
+    public Buchen updateBuchen(Long id) {
+        LocalDate heute = LocalDate.now();  // Aktuelles Datum
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = heute.format(formatter);  // Formatierung des LocalDate
+
+        // Für das Logging oder weitere Verarbeitung
+        System.out.println("Aktuelles Datum formatiert: " + formattedDate);
+
+        // Umwandlung zurück in ein Date-Objekt, falls benötigt:
+        Date rueckgabeDatum = java.sql.Date.valueOf(heute);
+        Buchen vorhandeneBuchen = buchenRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Buchung nicht gefunden."));
+        double gebuehren = berechneGebuehren(vorhandeneBuchen.getAus_datum(), rueckgabeDatum);
+
+        vorhandeneBuchen.setGebuehren(gebuehren);
+
+        return buchenRepository.save(vorhandeneBuchen);
+    }
+
+
     private Date getDateWithoutTime() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -64,5 +86,14 @@ public class BuchenService {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
+    }
+
+    private double berechneGebuehren (Date ausgabeDatum, Date heute) {
+        if (ausgabeDatum.before(heute)) {
+            long differenz = heute.getTime() - ausgabeDatum.getTime();
+            long tageUeberfaellig = TimeUnit.MILLISECONDS.toDays(differenz);
+            return tageUeberfaellig * 3.0;  // 3€ pro Tag Verspätung
+        }
+        return 0.0;
     }
 }
