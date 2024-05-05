@@ -17,6 +17,8 @@ import test from 'node:test';
 export class FavoritenComponent implements OnInit{
   media: FavoriteEntity[] = [];
 
+
+
   constructor(private favoritService: ReservierungService) {}
 
   ngOnInit(): void {
@@ -35,7 +37,7 @@ export class FavoritenComponent implements OnInit{
 
   getAllFavorits() {
     const user_id = this.getCurrentUserId();
-    this.favoritService.getByUserReservierung().subscribe(
+    this.favoritService.getByUserReservierung(user_id).subscribe(
       (response: FavoriteEntity | FavoriteEntity[]) => {
         if (Array.isArray(response)) {
           this.media = response;
@@ -49,6 +51,13 @@ export class FavoritenComponent implements OnInit{
   }
 
 
+  deleteFavorite(media :FavoriteEntity) {
+    const mediaID = media.id
+    console.log(media.id)
+    this.favoritService.deleteReservierung(mediaID).subscribe(
+    )
+    location.reload()
+  }
 
 }
 

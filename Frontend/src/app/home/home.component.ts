@@ -59,6 +59,7 @@ export class HomeComponent implements OnInit {
   like(media: Media) {
     this.mediaLikes[media.id] = !this.mediaLikes[media.id];
     if (this.mediaLikes[media.id]) {
+      console.log(media.id)
       const user_id = this.getCurrentUserId();
       const media_id = media.id;
       const mediares: Reservierung = {user:{id: user_id},

@@ -54,9 +54,9 @@ export class ReservierungService implements OnInit {
     return this.http.get<FavoriteEntity>(`${this.baseUrl}/getById/${resv}`, this.options);
   }
 
-  public getByUserReservierung(): Observable<FavoriteEntity> {
+  public getByUserReservierung(resv: FavoriteEntity): Observable<FavoriteEntity> {
     this.initializeHeaders();
-    return this.http.get<FavoriteEntity>(`${this.baseUrl}/getByUser`, this.options);
+    return this.http.get<FavoriteEntity>(`${this.baseUrl}/getByUserId/${resv}`, this.options);
   }
 
   public addReservierung(resv: Reservierung): Observable<Reservierung> {
@@ -69,7 +69,7 @@ export class ReservierungService implements OnInit {
     return this.http.put<ReqRes>(`${this.baseUrl}/update`, resv, this.options);
   }
 
-  public deleteReservierung (resv: ReqRes): Observable<ReqRes> {
+  public deleteReservierung (resv: FavoriteEntity): Observable<ReqRes> {
     this.initializeHeaders();
     return this.http.delete<ReqRes>(`${this.baseUrl}/delete/${resv}`, this.options);
   }

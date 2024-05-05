@@ -20,7 +20,7 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.media_id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.user_id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-            <button class="text-indigo-500 hover:text-indigo-900">Entfernen</button>
+            <button class="text-indigo-500 hover:text-indigo-900" (click)="deleteFavorite(media)">Entfernen</button>
           </td>
         </tr>
       </tbody>

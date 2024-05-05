@@ -1,5 +1,5 @@
 export class FavoriteEntity {
-  id: number;
+  id: any;
   ab_datum: any;
   aus_datum: any;
   media_id: any;
