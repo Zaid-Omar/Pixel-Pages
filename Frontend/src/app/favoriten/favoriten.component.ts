@@ -7,6 +7,7 @@ import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { CommonModule } from '@angular/common';
 import test from 'node:test';
 import { Media } from '../entity/MediaEntity';
+import { response } from 'express';
 
 @Component({
   selector: 'app-favoriten',
@@ -17,6 +18,7 @@ import { Media } from '../entity/MediaEntity';
 })
 export class FavoritenComponent implements OnInit{
   media: FavoriteEntity[] = [];
+  booking: Media[] = [];
 
 
 
@@ -42,14 +44,14 @@ export class FavoritenComponent implements OnInit{
       (response: FavoriteEntity | FavoriteEntity[]) => {
         if (Array.isArray(response)) {
           this.media = response;
+          console.log(response)
         } else {
           this.media = [response];
         }
       }, error => {
         console.error('Fehler beim Abrufen der Medien, FavorieComponent', error)
       }
-    )
-  }
+    )}
 
 
 
@@ -57,8 +59,7 @@ export class FavoritenComponent implements OnInit{
     const mediaID = media.id
     this.favoritService.deleteReservierung(mediaID).subscribe(
     )
-    //location.reload()
-
+    location.reload()
   }
 
 }

@@ -8,6 +8,7 @@ import { Reservierung } from '../entity/ReservierungsEntity';
 import { HttpHeaders } from '@angular/common/http';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { idEntity } from '../entity/idEntity';
+import { Media } from '../entity/MediaEntity';
 
 @Injectable({
   providedIn: 'root'
@@ -57,6 +58,11 @@ export class ReservierungService implements OnInit {
   public getByUserReservierung(resv: FavoriteEntity): Observable<FavoriteEntity> {
     this.initializeHeaders();
     return this.http.get<FavoriteEntity>(`${this.baseUrl}/getByUserId/${resv}`, this.options);
+  }
+
+  public getByBookingUserReservierung(resv: Media): Observable<Media> {
+    this.initializeHeaders();
+    return this.http.get<Media>(`${this.baseUrl}/getByUserId/${resv}`, this.options);
   }
 
   public addReservierung(resv: Reservierung): Observable<Reservierung> {
