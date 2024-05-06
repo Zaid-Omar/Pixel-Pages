@@ -17,8 +17,8 @@ import java.util.Date;
 public class ReservierungDto {
 
     private long id;
-    private User user;
-    private Media media;
+    private Long user;
+    private Long media;
     private Date aus_datum;
     private Date ab_datum;
 }

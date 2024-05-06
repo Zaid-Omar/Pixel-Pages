@@ -156,7 +156,7 @@ export class HomeComponent implements OnInit {
   }
 
   isLiked(mediaId: number): boolean {
-    return this.likedmedia.some(item => item.media_id?.id === mediaId);
+    return this.likedmedia.some(item => item.media.id === mediaId);
   }
 }
 

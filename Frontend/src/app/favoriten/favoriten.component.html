@@ -17,8 +17,8 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.ab_datum }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.aus_datum }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.media_id?.id }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.user_id?.id }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.media.id }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.user.id }}</td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
             <button class="text-indigo-500 hover:text-indigo-900" (click)="deleteFavorite(media)">Entfernen</button>
           </td>
@@ -30,8 +30,8 @@
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.id }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.ab_datum }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.aus_datum }}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.media_id?.id }}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.user_id?.id }}</td>        <div class="flex justify-between mt-4">
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.media.id }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ media.user.id }}</td>        <div class="flex justify-between mt-4">
           <button class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Entfernen</button>
         </div>
       </div>
