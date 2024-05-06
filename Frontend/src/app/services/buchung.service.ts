@@ -68,6 +68,6 @@ export class BuchungService {
 
   public deleteBuchung (resv: FavoriteEntity): Observable<ReqRes> {
     this.initializeHeaders();
-    return this.http.delete<ReqRes>(`${this.baseUrl}/delete/${resv}`, this.options);
+    return this.http.delete<ReqRes>(`${this.baseUrl}/deleteById/${resv}`, this.options);
   }
 }

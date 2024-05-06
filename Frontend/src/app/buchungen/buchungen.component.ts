@@ -5,6 +5,8 @@ import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { BuchungService } from '../services/buchung.service';
 import { response } from 'express';
 import { error } from 'console';
+import { Buchung } from '../entity/BuchungsEntity';
+import { Media } from '../entity/MediaEntity';
 
 @Component({
   selector: 'app-buchungen',
@@ -56,6 +58,39 @@ export class BuchungenComponent implements OnInit{
         console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
       }
     )
+  }
+
+  deleteFavorite(media: FavoriteEntity) {
+    const mediaID = media.id
+    this.buchungServ.deleteBuchung(mediaID).subscribe(
+    )
+    location.reload()
+  }
+
+  ausleihen(media: Media) {
+    const media_id = media.id
+    const user_id = this.getCurrentUserId();
+    const mediares: Buchung = {
+          user: { id: user_id },
+          media: { id: media_id }
+        };
+    console.log('Sending reservation:', mediares);
+    this.buchungServ.addBuchung(mediares).subscribe({
+      next: (res) => console.log('Buchung erfolgreich:', res),
+      error: (err) => console.error('Fehler bei der Buchung:', err)
+    })}
+
+  verlaengerMedium(media: FavoriteEntity) {
+    const media_id = media.id
+    const user_id = this.getCurrentUserId();
+    const mediares: Buchung = {
+      user: { id: user_id },
+      media: { id: media_id }
+    };
+    this.buchungServ.deleteBuchung(media_id).subscribe({
+      next: (res) => console.log('Buchung verlängert(gelöscht):', res),
+      error: (err) => console.error('Fehler bei der Verlängerung(löschen):', err)
+    })
   }
 }
 

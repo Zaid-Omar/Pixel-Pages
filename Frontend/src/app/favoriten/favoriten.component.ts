@@ -52,10 +52,9 @@ export class FavoritenComponent implements OnInit{
   }
 
 
+
   deleteFavorite(media :FavoriteEntity) {
     const mediaID = media.id
-    console.log(media.id)
-    console.log(media.media_id.id)
     this.favoritService.deleteReservierung(mediaID).subscribe(
     )
     //location.reload()
