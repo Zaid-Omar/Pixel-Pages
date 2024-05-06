@@ -1,5 +1,5 @@
 export class Media {
-  id: number;
+  id: any;
   titel: string;
   autor: string;
   typ: string;

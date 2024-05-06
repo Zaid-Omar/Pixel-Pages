@@ -8,6 +8,7 @@ import { MediaService } from '../services/media.service';
 import { Observable } from 'rxjs';
 import { ReservierungService } from '../services/reservierung.service';
 import { Reservierung } from '../entity/ReservierungsEntity';
+import { FavoriteEntity } from '../entity/FavoriteEntity';
 
 @Component({
   selector: 'app-home',
@@ -22,12 +23,14 @@ export class HomeComponent implements OnInit {
   selectedMedia: any;
   mediaLikes: { [key: number]: boolean } = {};
   media: Media[] = [];
+  likedmedia : FavoriteEntity[] = [];
 
   constructor(private http: HttpClient, private apisService: ApisService, private mediaService: MediaService, private resService: ReservierungService) {
   }
 
   ngOnInit() {
     this.getAllMedia();
+    this.getAllFavorits();
   }
 
   searchMedia() {
@@ -50,6 +53,7 @@ export class HomeComponent implements OnInit {
   }
 
   ausleihen(media: any) {
+
     media.ausgeliehen = true;
     this.showConfirmationDialog = false;
     this.selectedMedia = null;
@@ -57,20 +61,29 @@ export class HomeComponent implements OnInit {
   }
 
   like(media: Media) {
+    const isLiked = this.isLiked(media.id);
+
     this.mediaLikes[media.id] = !this.mediaLikes[media.id];
+
     if (this.mediaLikes[media.id]) {
-      console.log(media.id)
-      const user_id = this.getCurrentUserId();
-      const media_id = media.id;
-      const mediares: Reservierung = {user:{id: user_id},
-         media:{id: media_id}
-      };
-      console.log('Sending reservation:', mediares);
-      this.resService.addReservierung(mediares)
-        .subscribe({
-          next: (res) => console.log('Reservierung erfolgreich:', res),
-          error: (err) => console.error('Fehler bei der Reservierung:', err)
-        });
+        console.log(media.id);
+        const user_id = this.getCurrentUserId();
+        const media_id = media.id;
+        const mediares: Reservierung = {
+            user: { id: user_id },
+            media: { id: media_id }
+        };
+        console.log('Sending reservation:', mediares);
+        this.resService.addReservierung(mediares)
+            .subscribe({
+                next: (res) => console.log('Reservierung erfolgreich:', res),
+                error: (err) => console.error('Fehler bei der Reservierung:', err)
+            });
+    } else {
+        if (isLiked) {
+          console.log("was passiert hiet")
+            this.deleteFavorite(media.id)
+        }
     }
   }
 
@@ -82,7 +95,17 @@ export class HomeComponent implements OnInit {
         return userId;
       } else {
         throw new Error("User ID not found in localStorage");
-    }}}
+      }
+    }
+  }
+
+  deleteFavorite(media :FavoriteEntity) {
+    const mediaID = media.id
+    console.log(media.id)
+    this.resService.deleteReservierung(mediaID).subscribe(
+    )
+    location.reload()
+  }
 
   userLeihtAus() {
     const userId = localStorage.getItem('user_id');
@@ -104,9 +127,26 @@ export class HomeComponent implements OnInit {
       }
     );
   }
+
+  getAllFavorits() {
+    const user_id = this.getCurrentUserId();
+    this.resService.getByUserReservierung(user_id).subscribe(
+      (response: FavoriteEntity | FavoriteEntity[]) => {
+        if (Array.isArray(response)) {
+          this.likedmedia = response;
+        } else {
+          this.likedmedia = [response];
+        }
+      }, error => {
+        console.error('Fehler beim Abrufen der Medien, FavorieComponent', error)
+      }
+    );
+  }
+
+  isLiked(mediaId: number): boolean {
+    return this.likedmedia.some(item => item.media_id.id === mediaId);
+  }
 }
-
-
 
 @NgModule({
   imports: [

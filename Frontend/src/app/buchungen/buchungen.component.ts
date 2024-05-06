@@ -1,75 +1,61 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { FavoriteEntity } from '../entity/FavoriteEntity';
+import { BuchungService } from '../services/buchung.service';
+import { response } from 'express';
+import { error } from 'console';
 
 @Component({
   selector: 'app-buchungen',
   templateUrl: './buchungen.component.html',
   styleUrls: ['./buchungen.component.scss']
 })
-export class BuchungenComponent {
-  searchTerm: string = "";
-  bookings: any[] = [
-    {
-      title: "Buch 1",
-      category: "Romane",
-      isbn: "123456789",
-      dueDate: "30.04.2024"
-    },
-    {
-      title: "Buch 2",
-      category: "Krimis",
-      isbn: "987654321",
-      dueDate: "15.05.2024"
-    },
-    {
-      title: "Buch 3",
-      category: "Science Fiction",
-      isbn: "456789123",
-      dueDate: "20.05.2024"
-    }
-  ];
+export class BuchungenComponent implements OnInit{
 
-  searchBooks() {
-    if (this.searchTerm.trim() === "") {
-      this.bookings = [
-        {
-          title: "Buch 1",
-          category: "Romane",
-          isbn: "123456789",
-          dueDate: "30.04.2024"
-        },
-        {
-          title: "Buch 2",
-          category: "Krimis",
-          isbn: "987654321",
-          dueDate: "15.05.2024"
-        },
-        {
-          title: "Buch 3",
-          category: "Science Fiction",
-          isbn: "456789123",
-          dueDate: "20.05.2024"
-        }
-      ];
-    } else {
-      this.bookings = this.bookings.filter(booking =>
-        booking.title.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        booking.category.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        booking.isbn.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        booking.dueDate.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-  }
+  searchTerm: string = "";
+  bookings: FavoriteEntity[] = [];
+
+  constructor(private buchungServ: BuchungService) {}
+
+  searchBooks() {}
 
   extendBooking(booking: any) {
-    // Beispiel-Implementierung für die Buchverlängerung
     console.log("Buchverlängerung für", booking.title);
   }
 
   returnBook(booking: any) {
     // Beispiel-Implementierung für die Buchrückgabe
     console.log("Buchrückgabe für", booking.title);
+  }
+
+  ngOnInit(): void {
+    this.getAllBuchungByUser();
+  }
+
+  getCurrentUserId(): any {
+    if (typeof localStorage !== 'undefined') {
+      const userIdString: string | null = localStorage.getItem('user_id');
+    if (userIdString !== null) {
+      const userId: number = parseInt(userIdString, 10);
+      return userId;
+    } else {
+      throw new Error("User ID not found in localStorage");
+    }}}
+
+  getAllBuchungByUser() {
+    const user_id = this.getCurrentUserId();
+    this.buchungServ.getByUserBuchung(user_id).subscribe(
+      (response: FavoriteEntity | FavoriteEntity[]) => {
+        if (Array.isArray(response)) {
+          this.bookings = response;
+        } else {
+          this.bookings = [response];
+        }
+      }, error => {
+        console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
+      }
+    )
   }
 }
 

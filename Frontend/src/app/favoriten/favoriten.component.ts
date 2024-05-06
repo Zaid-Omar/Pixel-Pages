@@ -6,6 +6,7 @@ import { resolve } from 'path';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { CommonModule } from '@angular/common';
 import test from 'node:test';
+import { Media } from '../entity/MediaEntity';
 
 @Component({
   selector: 'app-favoriten',
@@ -54,9 +55,11 @@ export class FavoritenComponent implements OnInit{
   deleteFavorite(media :FavoriteEntity) {
     const mediaID = media.id
     console.log(media.id)
+    console.log(media.media_id.id)
     this.favoritService.deleteReservierung(mediaID).subscribe(
     )
-    location.reload()
+    //location.reload()
+
   }
 
 }
