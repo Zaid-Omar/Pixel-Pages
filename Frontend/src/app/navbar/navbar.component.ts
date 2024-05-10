@@ -73,7 +73,7 @@ export class NavbarComponent implements OnInit{
         this.username = currentUserData.benutzername;
 
         // Check if the user has the role 'ROLE_ADMIN'
-        const hasAdminRole = currentUserData.authorities.some((authority: { authority: string }) => authority.authority === 'ADMIN_ROLE');
+        const hasAdminRole = currentUserData.authorities.some((authority: { authority: string }) => authority.authority === 'ROLE_ADMIN');
         this.isAdmin = hasAdminRole;
       } else {
         console.log('Der currentUser-Schlüssel wurde im localStorage nicht gefunden.');
