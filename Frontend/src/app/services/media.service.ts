@@ -58,9 +58,9 @@ export class MediaService implements OnInit{
     return this.http.get<ReqRes>(`${this.baseUrl}/getByTitle`, this.options);
   }
 
-  public addMedia(media: ReqRes): Observable<ReqRes> {
+  public addMedia(media: Media): Observable<Media> {
     this.initializeHeaders();
-    return this.http.post<ReqRes>(`${this.baseUrl}/addMedia`, media, this.options);
+    return this.http.post<Media>(`${this.baseUrl}/addMedia`, media, this.options);
   }
 
   public updateMedia(media: ReqRes): Observable<ReqRes> {

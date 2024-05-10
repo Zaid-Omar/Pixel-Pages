@@ -6,6 +6,7 @@ import { FavoritenComponent } from './favoriten/favoriten.component';
 import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { UsersettingsComponent } from './usersettings/usersettings.component';
+import { VerwaltungComponent } from './verwaltung/verwaltung.component';
 
 
 export const routes: Routes = [
@@ -29,5 +30,8 @@ export const routes: Routes = [
   },
   {
     'path': 'einstellungen', component:UsersettingsComponent
+  },
+  {
+    'path': 'verwaltung', component:VerwaltungComponent
   }
 ];
