@@ -17,6 +17,8 @@ export class NavbarComponent implements OnInit{
   activeIndex: number = 0;
   anmeldeboolean: boolean = false;
   username: string = '';
+  isAdmin: boolean = false;
+  proder: string = "";
 
   constructor(private router: Router, private prodser: ApisService, private cdr: ChangeDetectorRef) {
     this.router.events.subscribe((event) => {
@@ -33,6 +35,9 @@ export class NavbarComponent implements OnInit{
             break;
           case '/kontakt':
             this.activeIndex = 3;
+            break;
+          case '/verwaltung':
+            this.activeIndex = 4;
             break;
           case '/login':
             this.activeIndex = -1;
@@ -66,19 +71,23 @@ export class NavbarComponent implements OnInit{
       if (currentUserDataString) {
         const currentUserData = JSON.parse(currentUserDataString);
         this.username = currentUserData.benutzername;
+
+        // Check if the user has the role 'ROLE_ADMIN'
+        const hasAdminRole = currentUserData.authorities.some((authority: { authority: string }) => authority.authority === 'ROLE_ADMIN');
+        this.isAdmin = hasAdminRole;
       } else {
         console.log('Der currentUser-Schlüssel wurde im localStorage nicht gefunden.');
+        this.isAdmin = false;
       }
 
       const login = localStorage.getItem('isLoggedIn');
-      if (login) {
-        this.anmeldeboolean = true;
-      } else {
-        this.anmeldeboolean = false;
-      }
+      this.anmeldeboolean = login ? true : false;
     } else {
+      // Handle the case when localStorage is not available
+      console.log('Local storage is not available.');
     }
   }
+
 
 
 
