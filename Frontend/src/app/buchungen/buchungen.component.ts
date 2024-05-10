@@ -7,6 +7,7 @@ import { response } from 'express';
 import { error } from 'console';
 import { Buchung } from '../entity/BuchungsEntity';
 import { Media } from '../entity/MediaEntity';
+import { idEntity } from '../entity/idEntity';
 
 @Component({
   selector: 'app-buchungen',
@@ -61,11 +62,20 @@ export class BuchungenComponent implements OnInit{
   }
 
   deleteFavorite(media: FavoriteEntity) {
-    const mediaID = media.id
+    const mediaID = media.id;
+
+    // Entferne das Element von deinem Backend
     this.buchungServ.deleteBuchung(mediaID).subscribe(
-    )
-    location.reload()
+      () => {
+        // Hole die Liste der ausgeliehenen Medienobjekte aus dem LocalStorage
+        const borrowedMediaJSON = localStorage.getItem('borrowedMedia');
+        console.log(borrowedMediaJSON)
+      }
+    );
   }
+
+
+
 
   ausleihen(media: Media) {
     const media_id = media.id

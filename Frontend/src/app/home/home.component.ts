@@ -25,18 +25,25 @@ export class HomeComponent implements OnInit {
   selectedMedia: any;
   mediaLikes: { [key: number]: boolean } = {};
   media: Media[] = [];
-  likedmedia : FavoriteEntity[] = [];
+  likedmedia: FavoriteEntity[] = [];
+  borrowedMedia: number[] = []; // Store borrowed media IDs
 
-  constructor(private http: HttpClient, private apisService: ApisService, private mediaService: MediaService, private resService: ReservierungService, private BuchungServ: BuchungService) {
-  }
+  constructor(
+    private http: HttpClient,
+    private apisService: ApisService,
+    private mediaService: MediaService,
+    private resService: ReservierungService,
+    private BuchungServ: BuchungService
+  ) {}
 
   ngOnInit() {
     this.getAllMedia();
     this.getAllFavorits();
+    this.loadBorrowedMedia(); // Load borrowed media from localStorage
   }
 
   searchMedia() {
-    // Add logic here to filter media based on searchTerm
+    // Implement search functionality here
   }
 
   showConfirmation(media: any) {
@@ -45,7 +52,7 @@ export class HomeComponent implements OnInit {
       this.showConfirmationDialog = true;
       this.selectedMedia = media;
     } else {
-      console.log("Du musst angemeldet sein!");
+      console.log('Du musst angemeldet sein!');
     }
   }
 
@@ -55,86 +62,71 @@ export class HomeComponent implements OnInit {
   }
 
   ausleihen(media: Media) {
-    const media_id = media.id
+    const media_id = media.id;
     const user_id = this.getCurrentUserId();
     const mediares: Buchung = {
-          user: { id: user_id },
-          media: { id: media_id }
-        };
+      user: { id: user_id },
+      media: { id: media_id }
+    };
+
     console.log('Sending reservation:', mediares);
     this.BuchungServ.addBuchung(mediares).subscribe({
-      next: (res) => console.log('Buchung erfolgreich:', res),
+      next: (res) => {
+        console.log('Buchung erfolgreich:', res);
+        this.borrowedMedia.push(media_id); // Mark media as borrowed
+        this.saveBorrowedMedia(); // Save borrowed media to localStorage
+      },
       error: (err) => console.error('Fehler bei der Buchung:', err)
-    })
-    // media.ausgeliehen = true;
-    // this.showConfirmationDialog = false;
-    // this.selectedMedia = null;
-    // this.userLeihtAus();
+    });
+
+    this.showConfirmationDialog = false;
+    this.selectedMedia = null;
   }
 
-   like(media: Media) {
-     const isLiked = this.isLiked(media.id);
-
-     this.mediaLikes[media.id] = !this.mediaLikes[media.id];
-
-     if (this.mediaLikes[media.id]) {
-         console.log(media.id);
-         const user_id = this.getCurrentUserId();
-         const media_id = media.id;
-         const mediares: Reservierung = {
-             user: { id: user_id },
-             media: { id: media_id }
-         };
-         console.log('Sending reservation:', mediares);
-         this.resService.addReservierung(mediares)
-             .subscribe({
-                 next: (res) => console.log('Reservierung erfolgreich:', res),
-                 error: (err) => console.error('Fehler bei der Reservierung:', err)
-             });
-     } else {
-         if (isLiked) {
-           console.log("was passiert hiet")
-             this.deleteFavorite(media.id)
-         }
-     }
-   }
-
-  getCurrentUserId(): any {
-    if (typeof localStorage !== 'undefined') {
-      const userIdString: string | null = localStorage.getItem('user_id');
-      if (userIdString !== null) {
-        const userId: number = parseInt(userIdString, 10);
-        return userId;
-      } else {
-        throw new Error("User ID not found in localStorage");
+  like(media: Media) {
+    const isLiked = this.isLiked(media.id);
+    this.mediaLikes[media.id] = !this.mediaLikes[media.id];
+    if (this.mediaLikes[media.id]) {
+      console.log(media.id);
+      const user_id = this.getCurrentUserId();
+      const media_id = media.id;
+      const mediares: Reservierung = {
+        user: { id: user_id },
+        media: { id: media_id }
+      };
+      console.log('Sending reservation:', mediares);
+      this.resService.addReservierung(mediares).subscribe({
+        next: (res) => console.log('Reservierung erfolgreich:', res),
+        error: (err) => console.error('Fehler bei der Reservierung:', err)
+      });
+    } else {
+      if (isLiked) {
+        this.deleteFavorite(media.id);
       }
     }
   }
 
-  deleteFavorite(media :FavoriteEntity) {
-    const mediaID = media.id
-    console.log(media.id)
-    this.resService.deleteReservierung(mediaID).subscribe(
-    )
-    location.reload()
+  getCurrentUserId(): any {
+    const userIdString: string | null = localStorage.getItem('user_id');
+    if (userIdString !== null) {
+      return parseInt(userIdString, 10);
+    } else {
+      throw new Error('User ID not found in localStorage');
+    }
   }
 
-  userLeihtAus() {
-    const userId = localStorage.getItem('user_id');
-    const currentUser = localStorage.getItem('currentUser');
-    console.log('User ID aus dem localStorage:', userId);
+  deleteFavorite(mediaId: any) {
+    this.resService.deleteReservierung(mediaId).subscribe(() => {
+      location.reload();
+    });
   }
 
   getAllMedia() {
     this.mediaService.getAllMedia().subscribe(
       (response: Media | Media[]) => {
-        if (Array.isArray(response)) {
-          this.media = response;
-        } else {
-          this.media = [response];
-        }
+        this.media = Array.isArray(response) ? response : [response];
       },
-      error => {
+      (error) => {
         console.error('Fehler beim Abrufen der Medien:', error);
       }
     );
@@ -144,21 +136,34 @@ export class HomeComponent implements OnInit {
     const user_id = this.getCurrentUserId();
     this.resService.getByUserReservierung(user_id).subscribe(
       (response: FavoriteEntity | FavoriteEntity[]) => {
-        if (Array.isArray(response)) {
-          this.likedmedia = response;
-        } else {
-          this.likedmedia = [response];
-        }
-      }, error => {
-        console.error('Fehler beim Abrufen der Medien, FavorieComponent', error)
+        this.likedmedia = Array.isArray(response) ? response : [response];
+      },
+      (error) => {
+        console.error('Fehler beim Abrufen der Medien, FavorieComponent', error);
       }
     );
   }
 
   isLiked(mediaId: number): boolean {
-    return this.likedmedia.some(item => item.media.id === mediaId);
+    return this.likedmedia.some((item) => item.media.id === mediaId);
+  }
+
+  isBorrowed(mediaId: number): boolean {
+    return this.borrowedMedia.includes(mediaId);
+  }
+
+  saveBorrowedMedia() {
+    localStorage.setItem('borrowedMedia', JSON.stringify(this.borrowedMedia));
+  }
+
+  loadBorrowedMedia() {
+    const borrowedMedia1 = localStorage.getItem('borrowedMedia');
+    if (borrowedMedia1) {
+      this.borrowedMedia = JSON.parse(borrowedMedia1);
+    }
   }
 }
+
 
 @NgModule({
   imports: [
