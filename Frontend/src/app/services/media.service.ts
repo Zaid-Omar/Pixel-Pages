@@ -70,6 +70,6 @@ export class MediaService implements OnInit{
 
   public deleteMediaByID(media: ReqRes): Observable<ReqRes> {
     this.initializeHeaders();
-    return this.http.delete<ReqRes>(`${this.baseUrl}/deleteMedia${media}`, this.options);
+    return this.http.delete<ReqRes>(`${this.baseUrl}/deleteMedia/${media}`, this.options);
   }
 }
