@@ -1,12 +1,57 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
+import { FavoriteEntity } from '../entity/FavoriteEntity';
+import { ReservierungService } from '../services/reservierung.service';
+import { NgForOf, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-mitglieder',
   standalone: true,
-  imports: [],
+  imports: [NgIf, NgForOf],
   templateUrl: './mitglieder.component.html',
-  styleUrl: './mitglieder.component.scss'
+  styleUrls: ['./mitglieder.component.scss']
 })
-export class MitgliederComponent {
+export class MitgliederComponent implements OnInit {
+  isFormVisible: boolean = false;
+  media: FavoriteEntity[] = [];
 
+  constructor(private reservierungService: ReservierungService) {}
+
+  ngOnInit(): void {
+    this.getAllFavorits();
+  }
+
+  toggleFormVisibility(): void {
+    this.isFormVisible = !this.isFormVisible;
+  }
+
+  getAllFavorits(): void {
+    this.reservierungService.getAllReservierung().pipe(
+      tap((response: FavoriteEntity[] | FavoriteEntity) => {
+        if (Array.isArray(response)) {
+          // Sortieren der Daten nach media.media.id
+          this.media = response.sort((a, b) => a.media.id - b.media.id);
+        } else {
+          this.media = [response];
+        }
+      }),
+      catchError(error => {
+        console.error('Fehler beim Abrufen der Favoriten:', error);
+        throw error;
+      })
+    ).subscribe();
+  }
+
+  deleteFavorite(media: FavoriteEntity): void {
+    const mediaID = media.id;
+    this.reservierungService.deleteReservierung(mediaID).subscribe({
+      next: () => {
+        this.getAllFavorits();  // Aktualisiert die Liste nach dem Löschen
+      },
+      error: (error) => {
+        console.error('Fehler beim Löschen des Favoriten:', error);
+      }
+    });
+  }
 }
