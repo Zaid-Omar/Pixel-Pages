@@ -63,16 +63,29 @@ export class BuchungenComponent implements OnInit{
 
   deleteFavorite(media: FavoriteEntity) {
     const mediaID = media.id;
+    const deleteID = media.media.id
 
     // Entferne das Element von deinem Backend
     this.buchungServ.deleteBuchung(mediaID).subscribe(
       () => {
-        // Hole die Liste der ausgeliehenen Medienobjekte aus dem LocalStorage
+        console.log("Medienbuchung gelöscht:", mediaID);
+        // Aktualisiere das borrowedMedia Array im LocalStorage
         const borrowedMediaJSON = localStorage.getItem('borrowedMedia');
-        console.log(borrowedMediaJSON)
-      }
+        if (borrowedMediaJSON) {
+          const borrowedMediaArray: number[] = JSON.parse(borrowedMediaJSON);
+          const index = borrowedMediaArray.indexOf(deleteID);
+          if (index > -1) {
+            borrowedMediaArray.splice(index, 1); // Entferne das gelöschte Medium aus dem Array
+            localStorage.setItem('borrowedMedia', JSON.stringify(borrowedMediaArray));
+            console.log("Local Storage updated:", borrowedMediaArray);
+          }
+        }
+      },
+      error => console.error('Fehler beim Löschen der Buchung:', error)
     );
+    location.reload();
   }
+
 
 
 

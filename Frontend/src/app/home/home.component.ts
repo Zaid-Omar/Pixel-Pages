@@ -76,6 +76,9 @@ export class HomeComponent implements OnInit {
     this.BuchungServ.addBuchung(mediares).subscribe({
       next: (res) => {
         console.log('Buchung erfolgreich:', res);
+        let map = new Map();
+        map.set(map, media_id);
+        console.log(map)
         this.borrowedMedia.push(media_id);
         this.saveBorrowedMedia();
         media.showConfirmation = false;  // Setzen Sie showConfirmation auf false
