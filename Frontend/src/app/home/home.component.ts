@@ -22,7 +22,6 @@ import { User } from '../entity/User';
 export class HomeComponent implements OnInit {
   message = '';
   searchTerm: string = '';
-  filteredMedia: any[] = [];
   showConfirmationDialog: boolean = false;
   selectedMedia: any;
   mediaLikes: { [key: number]: boolean } = {};
@@ -30,6 +29,8 @@ export class HomeComponent implements OnInit {
   likedmedia: FavoriteEntity[] = [];
   borrowedMedia: number[] = [];
   reservierung: any;
+  filteredMedia: Media[] = [];
+
 
   constructor(
     private http: HttpClient,
@@ -45,9 +46,17 @@ export class HomeComponent implements OnInit {
     this.loadBorrowedMedia();
   }
 
-  searchMedia() {
-
+  searchMedia(): void {
+    if (!this.searchTerm) {
+      this.filteredMedia = [...this.media]; // Show all media if no search term is entered
+    } else {
+      this.filteredMedia = this.media.filter(mediaItem =>
+        (mediaItem.titel?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+         mediaItem.isbn?.toLowerCase().includes(this.searchTerm.toLowerCase()))
+      );
+    }
   }
+
 
   showConfirmation(media: Media) {
     const login = localStorage.getItem('isLoggedIn');
@@ -151,13 +160,14 @@ export class HomeComponent implements OnInit {
 
 
 
-  getAllMedia() {
+  getAllMedia(): void {
     this.mediaService.getAllMedia().subscribe(
       (response: Media | Media[]) => {
-        this.media = Array.isArray(response) ? response : [response];
+        this.media = Array.isArray(response) ? response : [response];  // Ensures this.media is always an array
+        this.filteredMedia = Array.isArray(response) ? response : [response]; // Ensures this.filteredMedia is always an array
       },
       (error) => {
-        console.error('Fehler beim Abrufen der Medien:', error);
+        console.error('Error fetching media:', error);
       }
     );
   }
@@ -198,6 +208,7 @@ export class HomeComponent implements OnInit {
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     FormsModule
   ],
   declarations: [HomeComponent]

@@ -21,7 +21,18 @@ export class BuchungenComponent implements OnInit{
 
   constructor(private buchungServ: BuchungService) {}
 
-  searchBooks() {}
+  searchBooks() {
+    if (!this.searchTerm) {
+      this.getAllBuchungByUser(); // Fetch all bookings again or just reset the filter
+    } else {
+      const searchTermLower = this.searchTerm.toLowerCase();
+      this.bookings = this.bookings.filter(booking =>
+        booking.media.titel.toLowerCase().includes(searchTermLower) ||
+        booking.user.id.toString().includes(searchTermLower)
+      );
+    }
+  }
+
 
   extendBooking(booking: any) {
     console.log("Buchverlängerung für", booking.title);
