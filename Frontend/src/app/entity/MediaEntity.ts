@@ -6,6 +6,7 @@ export class Media {
   status: boolean;
   bild: string;
   isbn: string;
+  showConfirmation: boolean;  // Hinzufügen der showConfirmation Eigenschaft
 
   constructor(
     id: any,
@@ -14,7 +15,8 @@ export class Media {
     typ: string,
     status: boolean,
     bild: string,
-    isbn: string
+    isbn: string,
+    showConfirmation: boolean = false  // Standardwert als false
   ) {
     this.id = id;
     this.titel = titel;
@@ -23,5 +25,6 @@ export class Media {
     this.status = status;
     this.bild = bild;
     this.isbn = isbn;
+    this.showConfirmation = showConfirmation;
   }
 }

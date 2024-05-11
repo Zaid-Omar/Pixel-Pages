@@ -11,6 +11,8 @@ import { Reservierung } from '../entity/ReservierungsEntity';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { BuchungService } from '../services/buchung.service';
 import { Buchung } from '../entity/BuchungsEntity';
+import { response } from 'express';
+import { User } from '../entity/User';
 
 @Component({
   selector: 'app-home',
@@ -26,7 +28,8 @@ export class HomeComponent implements OnInit {
   mediaLikes: { [key: number]: boolean } = {};
   media: Media[] = [];
   likedmedia: FavoriteEntity[] = [];
-  borrowedMedia: number[] = []; // Store borrowed media IDs
+  borrowedMedia: number[] = [];
+  reservierung: any;
 
   constructor(
     private http: HttpClient,
@@ -39,25 +42,25 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.getAllMedia();
     this.getAllFavorits();
-    this.loadBorrowedMedia(); // Load borrowed media from localStorage
+    this.loadBorrowedMedia();
   }
 
   searchMedia() {
-    // Implement search functionality here
+
   }
 
-  showConfirmation(media: any) {
+  showConfirmation(media: Media) {
     const login = localStorage.getItem('isLoggedIn');
     if (login) {
-      this.showConfirmationDialog = true;
+      media.showConfirmation = true;
       this.selectedMedia = media;
     } else {
       console.log('Du musst angemeldet sein!');
     }
   }
 
-  hideConfirmation() {
-    this.showConfirmationDialog = false;
+  hideConfirmation(media: Media) {
+    media.showConfirmation = false;
     this.selectedMedia = null;
   }
 
@@ -69,12 +72,14 @@ export class HomeComponent implements OnInit {
       media: { id: media_id }
     };
 
-    console.log('Sending reservation:', mediares);
+    //console.log('Sending reservation:', mediares);
     this.BuchungServ.addBuchung(mediares).subscribe({
       next: (res) => {
         console.log('Buchung erfolgreich:', res);
-        this.borrowedMedia.push(media_id); // Mark media as borrowed
-        this.saveBorrowedMedia(); // Save borrowed media to localStorage
+        this.borrowedMedia.push(media_id);
+        this.saveBorrowedMedia();
+        media.showConfirmation = false;  // Setzen Sie showConfirmation auf false
+        this.selectedMedia = null;
       },
       error: (err) => console.error('Fehler bei der Buchung:', err)
     });
@@ -84,27 +89,51 @@ export class HomeComponent implements OnInit {
   }
 
   like(media: Media) {
-    const isLiked = this.isLiked(media.id);
-    this.mediaLikes[media.id] = !this.mediaLikes[media.id];
-    if (this.mediaLikes[media.id]) {
-      console.log(media.id);
-      const user_id = this.getCurrentUserId();
-      const media_id = media.id;
-      const mediares: Reservierung = {
+    const mediaId = media.id;
+    const isCurrentlyLiked = this.isLiked(mediaId);
+    const user_id = this.getCurrentUserId();
+
+    if (!isCurrentlyLiked) {
+      const reservation: Reservierung = {
         user: { id: user_id },
-        media: { id: media_id }
+        media: { id: mediaId }
       };
-      console.log('Sending reservation:', mediares);
-      this.resService.addReservierung(mediares).subscribe({
-        next: (res) => console.log('Reservierung erfolgreich:', res),
-        error: (err) => console.error('Fehler bei der Reservierung:', err)
+      this.resService.addReservierung(reservation).subscribe({
+        next: (res) => {
+          console.log('Reservation successful:', res.media);
+          this.mediaLikes[mediaId] = true;
+          this.updateLikedMediaArray();
+        },
+        error: (err) => console.error('Error in reservation:', err)
       });
     } else {
-      if (isLiked) {
-        this.deleteFavorite(media.id);
-      }
+      this.deleteFavorite(mediaId, user_id);
     }
   }
+
+  updateLikedMediaArray() {
+    this.getAllFavorits();
+  }
+
+  deleteFavorite(mediaId: number, userId: any) {
+    this.resService.getByUserReservierung(userId).subscribe(
+      (response: any) => {
+        const favorite = response.find((f: FavoriteEntity) => f.media.id === mediaId);
+        if (favorite) {
+          this.resService.deleteReservierung(favorite.id).subscribe(
+            success => {
+              console.log(`Favorite removed:`);
+              this.mediaLikes[mediaId] = false;
+              this.updateLikedMediaArray();
+            },
+            error => console.error('Error removing favorite:', error)
+          );
+        }
+      },
+      error => console.error('Error fetching favorites:', error)
+    );
+  }
+
 
   getCurrentUserId(): any {
     const userIdString: string | null = localStorage.getItem('user_id');
@@ -115,11 +144,9 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  deleteFavorite(mediaId: any) {
-    this.resService.deleteReservierung(mediaId).subscribe(() => {
-      location.reload();
-    });
-  }
+
+
+
 
   getAllMedia() {
     this.mediaService.getAllMedia().subscribe(

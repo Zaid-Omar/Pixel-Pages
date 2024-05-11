@@ -2,6 +2,9 @@ import { Media } from "./MediaEntity";
 import { User } from "./User";
 
 export class FavoriteEntity {
+  forEach(arg0: (item: any) => void) {
+    throw new Error('Method not implemented.');
+  }
   id: any;
   ab_datum: any;
   aus_datum: any;
