@@ -107,9 +107,9 @@ export class ApisService implements OnInit{
   //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user, this.options);
   // }
 
-  public updateUser(user: User): Observable<User> {
+  public updateUser(user: any): Observable<any> {
     this.initializeHeaders();
-    return this.http.put<User>(`${this.baseUrluser}/updateUser`, user, this.options);
+    return this.http.put<any>(`${this.baseUrluser}/updateUser`, user, this.options);
   }
 
   public deleteUserByID(user: User): Observable<User> {

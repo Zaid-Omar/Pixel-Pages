@@ -20,6 +20,7 @@ export class MitgliederComponent implements OnInit {
   isFormVisible: boolean = false;
   user: User[] = [];
 
+
   constructor(private userService: ApisService) {}
 
   ngOnInit(): void {
@@ -60,10 +61,15 @@ export class MitgliederComponent implements OnInit {
   }
 
   updateUser(user: User): void {
-    console.log(user)
-    this.userService.updateUser(user).subscribe({
-      next: (updatedUser) => {
-        console.log('User updated:', updatedUser);
+    const userObj = {
+      id: user.id,
+      benutzername: user.benutzername,
+      email: user.email,
+      nachname: user.nachname,
+      vorname: user.vorname
+    };
+    this.userService.updateUser(userObj).subscribe({
+      next: () => {
         user.isEditing = false;
       },
       error: (error) => {
