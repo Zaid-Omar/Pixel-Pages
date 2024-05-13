@@ -87,8 +87,4 @@ export class NavbarComponent implements OnInit{
       console.log('Local storage is not available.');
     }
   }
-
-
-
-
 }
