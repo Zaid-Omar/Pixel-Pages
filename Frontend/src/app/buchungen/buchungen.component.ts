@@ -19,11 +19,12 @@ export class BuchungenComponent implements OnInit{
   searchTerm: string = "";
   bookings: FavoriteEntity[] = [];
 
+
   constructor(private buchungServ: BuchungService) {}
 
   searchBooks() {
     if (!this.searchTerm) {
-      this.getAllBuchungByUser(); // Fetch all bookings again or just reset the filter
+      this.getAllBuchungByUser();
     } else {
       const searchTermLower = this.searchTerm.toLowerCase();
       this.bookings = this.bookings.filter(booking =>
@@ -33,13 +34,11 @@ export class BuchungenComponent implements OnInit{
     }
   }
 
-
   extendBooking(booking: any) {
     console.log("Buchverlängerung für", booking.title);
   }
 
   returnBook(booking: any) {
-    // Beispiel-Implementierung für die Buchrückgabe
     console.log("Buchrückgabe für", booking.title);
   }
 
@@ -75,18 +74,15 @@ export class BuchungenComponent implements OnInit{
   deleteFavorite(media: FavoriteEntity) {
     const mediaID = media.id;
     const deleteID = media.media.id
-
-    // Entferne das Element von deinem Backend
     this.buchungServ.deleteBuchung(mediaID).subscribe(
       () => {
         console.log("Medienbuchung gelöscht:", mediaID);
-        // Aktualisiere das borrowedMedia Array im LocalStorage
         const borrowedMediaJSON = localStorage.getItem('borrowedMedia');
         if (borrowedMediaJSON) {
           const borrowedMediaArray: number[] = JSON.parse(borrowedMediaJSON);
           const index = borrowedMediaArray.indexOf(deleteID);
           if (index > -1) {
-            borrowedMediaArray.splice(index, 1); // Entferne das gelöschte Medium aus dem Array
+            borrowedMediaArray.splice(index, 1);
             localStorage.setItem('borrowedMedia', JSON.stringify(borrowedMediaArray));
             console.log("Local Storage updated:", borrowedMediaArray);
           }
@@ -96,10 +92,6 @@ export class BuchungenComponent implements OnInit{
     );
     location.reload();
   }
-
-
-
-
 
   ausleihen(media: Media) {
     const media_id = media.id

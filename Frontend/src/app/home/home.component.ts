@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
   borrowedMedia: number[] = [];
   reservierung: any;
   filteredMedia: Media[] = [];
+  LoginIn: boolean = false;
 
 
   constructor(
@@ -44,16 +45,24 @@ export class HomeComponent implements OnInit {
     this.getAllMedia();
     this.getAllFavorits();
     this.loadBorrowedMedia();
+    this.isLoggedIn();
   }
 
   searchMedia(): void {
     if (!this.searchTerm) {
-      this.filteredMedia = [...this.media]; // Show all media if no search term is entered
+      this.filteredMedia = [...this.media];
     } else {
       this.filteredMedia = this.media.filter(mediaItem =>
         (mediaItem.titel?.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
          mediaItem.isbn?.toLowerCase().includes(this.searchTerm.toLowerCase()))
       );
+    }
+  }
+
+  isLoggedIn() {
+    const login = localStorage.getItem('isLoggedIn');
+    if (login) {
+      this.LoginIn = true
     }
   }
 
@@ -81,7 +90,6 @@ export class HomeComponent implements OnInit {
       media: { id: media_id }
     };
 
-    //console.log('Sending reservation:', mediares);
     this.BuchungServ.addBuchung(mediares).subscribe({
       next: (res) => {
         console.log('Buchung erfolgreich:', res);
@@ -90,7 +98,7 @@ export class HomeComponent implements OnInit {
         console.log(map)
         this.borrowedMedia.push(media_id);
         this.saveBorrowedMedia();
-        media.showConfirmation = false;  // Setzen Sie showConfirmation auf false
+        media.showConfirmation = false;
         this.selectedMedia = null;
       },
       error: (err) => console.error('Fehler bei der Buchung:', err)
@@ -146,25 +154,24 @@ export class HomeComponent implements OnInit {
     );
   }
 
-
   getCurrentUserId(): any {
-    const userIdString: string | null = localStorage.getItem('user_id');
-    if (userIdString !== null) {
-      return parseInt(userIdString, 10);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const userIdString: string | null = localStorage.getItem('user_id');
+      if (userIdString !== null) {
+        return parseInt(userIdString, 10);
+      } else {
+        throw new Error('User ID not found in localStorage');
+      }
     } else {
-      throw new Error('User ID not found in localStorage');
+      console.error('localStorage is not available');
     }
   }
-
-
-
-
 
   getAllMedia(): void {
     this.mediaService.getAllMedia().subscribe(
       (response: Media | Media[]) => {
-        this.media = Array.isArray(response) ? response : [response];  // Ensures this.media is always an array
-        this.filteredMedia = Array.isArray(response) ? response : [response]; // Ensures this.filteredMedia is always an array
+        this.media = Array.isArray(response) ? response : [response];
+        this.filteredMedia = Array.isArray(response) ? response : [response];
       },
       (error) => {
         console.error('Error fetching media:', error);
@@ -197,12 +204,19 @@ export class HomeComponent implements OnInit {
   }
 
   loadBorrowedMedia() {
-    const borrowedMedia1 = localStorage.getItem('borrowedMedia');
-    if (borrowedMedia1) {
-      this.borrowedMedia = JSON.parse(borrowedMedia1);
-    }
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const borrowedMedia1 = localStorage.getItem('borrowedMedia');
+      if (borrowedMedia1) {
+        this.borrowedMedia = JSON.parse(borrowedMedia1);
+      } else {
+        console.log('No borrowed media data found in localStorage.');
+        this.borrowedMedia = [];
+      }
+    } else {
+      console.error('localStorage is not available');
+      this.borrowedMedia = [];
+    }}
   }
-}
 
 
 @NgModule({

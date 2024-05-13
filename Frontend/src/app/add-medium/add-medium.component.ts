@@ -14,6 +14,7 @@ import { VerwaltungComponent } from '../verwaltung/verwaltung.component';
   templateUrl: './add-medium.component.html',
   styleUrl: './add-medium.component.scss'
 })
+
 export class AddMediumComponent {
   form: FormGroup;
   imageBase64: string | null = null;
@@ -22,6 +23,7 @@ export class AddMediumComponent {
   isTableVisible: boolean = false;
   searchTerm: string = '';
   bookings: FavoriteEntity[] = [];
+
 
   constructor(private fb: FormBuilder, private mediaServ: MediaService, private buchungServ: BuchungService) {
     this.form = this.fb.group({

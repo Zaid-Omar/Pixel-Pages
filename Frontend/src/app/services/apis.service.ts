@@ -86,7 +86,7 @@ export class ApisService implements OnInit{
 
   public getAllUser(): Observable<User> {
     this.initializeHeaders();
-    return this.http.get<ReqRes>(`${this.baseUrluser}/getAll`, this.options)
+    return this.http.get<User>(`${this.baseUrluser}/getAll`, this.options)
   }
 
   public getUserByID(registerEntity: ReqRes): Observable<ReqRes> {

@@ -32,6 +32,7 @@ export class LoginComponent {
   bild: any;
   benutzername: string = '';
   x: number = 0
+  refresh: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -52,12 +53,11 @@ export class LoginComponent {
       this.prodser.signIn(login).subscribe(
         (response: ReqRes) => {
           if (response.token) {
-            this.router.navigate(['/']);
-
+            this.router.navigate(['/refresh']);
             let isLoggedIn = true;
+            localStorage.setItem('refresh', this.refresh.toString());
             localStorage.setItem('isLoggedIn', isLoggedIn.toString());
             localStorage.setItem('token', response.token);
-
             let offer: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
             console.log(offer)
             this.prodser.getUserByUsername(offer).subscribe(
@@ -76,7 +76,6 @@ export class LoginComponent {
 
           } else {
             console.log('Anmeldung fehlgeschlagen');
-            console.log(this.loginForm.value);
           }
         },
         error => {

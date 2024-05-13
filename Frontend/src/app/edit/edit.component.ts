@@ -40,7 +40,6 @@ export class EditComponent {
   }
 
   returnBook(booking: any) {
-    // Beispiel-Implementierung für die Buchrückgabe
     console.log("Buchrückgabe für", booking.title);
   }
 
@@ -63,7 +62,6 @@ export class EditComponent {
     this.buchungServ.getAllMedia().subscribe(
       (response: Media | Media[]) => {
         this.bookings = Array.isArray(response) ? response : [response]
-
       }, error => {
         console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
       }
@@ -72,8 +70,6 @@ export class EditComponent {
 
   deleteFavorite(media: Media) {
     const mediaID = media.id;
-
-    // Entferne das Element von deinem Backend
     this.buchungServ.deleteMediaByID(mediaID).subscribe(
       () => {
         console.log("Medienbuchung gelöscht:", mediaID);

@@ -31,7 +31,6 @@ export class ReservierungsUebersichtComponent implements OnInit{
     this.reservierungService.getAllReservierung().pipe(
       tap((response: FavoriteEntity[] | FavoriteEntity) => {
         if (Array.isArray(response)) {
-          // Sortieren der Daten nach media.media.id
           this.media = response.sort((a, b) => a.media.id - b.media.id);
         } else {
           this.media = [response];
@@ -51,7 +50,7 @@ export class ReservierungsUebersichtComponent implements OnInit{
 
     this.reservierungService.deleteReservierung(mediaID).subscribe({
       next: () => {
-        this.getAllFavorits();  // Aktualisiert die Liste nach dem Löschen
+        this.getAllFavorits();
       },
       error: (error) => {
         console.error('Fehler beim Löschen des Favoriten:', error);

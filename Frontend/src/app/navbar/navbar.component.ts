@@ -19,6 +19,8 @@ export class NavbarComponent implements OnInit{
   username: string = '';
   isAdmin: boolean = false;
   proder: string = "";
+  refresh: boolean = false;
+
 
   constructor(private router: Router, private prodser: ApisService, private cdr: ChangeDetectorRef) {
     this.router.events.subscribe((event) => {
@@ -58,18 +60,20 @@ export class NavbarComponent implements OnInit{
     localStorage.removeItem('currentUser');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('borrowedMedia');
     localStorage.removeItem('token');
-    window.location.reload();
+    localStorage.setItem('refresh', this.refresh.toString());
+    this.router.navigate(['/refresh']);
   }
 
   ngOnInit() {
+    console.log("navbar sitnkt")
     if (typeof localStorage !== 'undefined') {
       const currentUserDataString = localStorage.getItem('currentUser');
       if (currentUserDataString) {
         const currentUserData = JSON.parse(currentUserDataString);
         this.username = currentUserData.benutzername;
-
-        // Check if the user has the role 'ROLE_ADMIN'
+        const token = currentUserData.token
         const hasAdminRole = currentUserData.authorities.some((authority: { authority: string }) => authority.authority === 'ROLE_ADMIN');
         this.isAdmin = hasAdminRole;
       } else {
@@ -80,7 +84,6 @@ export class NavbarComponent implements OnInit{
       const login = localStorage.getItem('isLoggedIn');
       this.anmeldeboolean = login ? true : false;
     } else {
-      // Handle the case when localStorage is not available
       console.log('Local storage is not available.');
     }
   }

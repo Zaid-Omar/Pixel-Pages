@@ -7,6 +7,7 @@ export class User {
   passwort: any;
   roles: any;
   isEditing?: any;
+  authorities: any;
 
   constructor(
     id: any,

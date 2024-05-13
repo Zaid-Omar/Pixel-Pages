@@ -7,6 +7,7 @@ import { SignupComponent } from './signup/signup.component';
 import { LoginComponent } from './login/login.component';
 import { UsersettingsComponent } from './usersettings/usersettings.component';
 import { VerwaltungComponent } from './verwaltung/verwaltung.component';
+import { AppComponent } from './app.component';
 
 
 export const routes: Routes = [
@@ -15,6 +16,9 @@ export const routes: Routes = [
   },
   {
     'path': '', component:HomeComponent
+  },
+  {
+    'path': 'refresh', component:AppComponent
   },
   {
     'path': 'kontakt', component:KontaktComponent
