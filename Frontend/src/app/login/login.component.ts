@@ -3,7 +3,7 @@ import { ReqRes } from "../entity/ReqRes";
 import { HttpClient, HttpClientModule, HttpHeaders } from "@angular/common/http";
 import { LoginEntity } from "../entity/LoginEntity";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { User } from "../entity/User";
+import { User } from "../entity/UserEntity";
 import { Media } from "../entity/MediaEntity";
 import { FormGroup } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';

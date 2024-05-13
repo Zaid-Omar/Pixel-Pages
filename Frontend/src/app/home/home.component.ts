@@ -12,7 +12,7 @@ import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { BuchungService } from '../services/buchung.service';
 import { Buchung } from '../entity/BuchungsEntity';
 import { response } from 'express';
-import { User } from '../entity/User';
+import { User } from '../entity/UserEntity';
 
 @Component({
   selector: 'app-home',

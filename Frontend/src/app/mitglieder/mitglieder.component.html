@@ -2,53 +2,50 @@
   <div class="w-full bg-white rounded-lg shadow dark:border dark:bg-gray-900 dark:border-gray-700">
     <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
       <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
-        Reservierungen anschauen
+        Benutzer anschauen
       </h1>
       <button (click)="toggleFormVisibility()" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-        {{ isFormVisible ? 'Reservierungen ausblenden' : 'Reservierungen aufklappen' }}
+        {{ isFormVisible ? 'Benutzer ausblenden' : 'Benutzer aufklappen' }}
       </button>
       <div *ngIf="isFormVisible" class="container mx-auto py-4">
         <!-- Tabelle für größere Bildschirme -->
         <table class="min-w-full divide-y divide-gray-200 font-sans hidden md:table">
           <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Von</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bis</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medien-ID</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Benutzer-ID</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Benutername</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vorname</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nachname</th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-Mail</th>
               <th scope="col" class="relative px-6 py-3"><span class="sr-only">Aktionen</span></th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900">
-            <tr *ngFor="let item of media">
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.id }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.ab_datum }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.aus_datum }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.media.id }}</td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.user.id }}</td>
+            <tr *ngFor="let item of user">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.benutzername }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.vorname }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.nachname }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ item.email }}</td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button (click)="deleteFavorite(item)" class="text-indigo-500 hover:text-indigo-900">Entfernen</button>
+                <button (click)="deleteUser(item)" class="text-indigo-500 hover:text-indigo-900">Entfernen</button>
               </td>
             </tr>
           </tbody>
         </table>
         <!-- Responsive Cards für kleinere Bildschirme -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:hidden">
-          <div *ngFor="let item of media" class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
-            <div>{{ item.id }}</div>
-            <div>{{ item.ab_datum }}</div>
-            <div>{{ item.aus_datum }}</div>
-            <div>{{ item.media.id }}</div>
-            <div>{{ item.user.id }}</div>
+          <div *ngFor="let item of user" class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
+            <div>{{ item.benutzername }}</div>
+            <div>{{ item.vorname }}</div>
+            <div>{{ item.nachname }}</div>
+            <div>{{ item.email }}</div>
             <div class="flex justify-between mt-4">
-              <button (click)="deleteFavorite(item)" class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Entfernen</button>
+              <button (click)="deleteUser(item)" class="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Entfernen</button>
             </div>
           </div>
         </div>
         <!-- Nachricht, falls keine Favoriten gefunden -->
-        <div *ngIf="media.length === 0" class="text-center text-gray-600 dark:text-gray-400 mt-8">
-          Keine Reservierungen gefunden.
+        <div *ngIf="user.length === 0" class="text-center text-gray-600 dark:text-gray-400 mt-8">
+          Keine Benutzer gefunden.
         </div>
       </div>
     </div>

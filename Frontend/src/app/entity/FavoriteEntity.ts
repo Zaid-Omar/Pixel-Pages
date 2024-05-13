@@ -1,5 +1,5 @@
 import { Media } from "./MediaEntity";
-import { User } from "./User";
+import { User } from "./UserEntity";
 
 export class FavoriteEntity {
   forEach(arg0: (item: any) => void) {

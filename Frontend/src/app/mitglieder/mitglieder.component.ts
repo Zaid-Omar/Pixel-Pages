@@ -4,6 +4,9 @@ import { catchError, tap } from 'rxjs/operators';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { ReservierungService } from '../services/reservierung.service';
 import { NgForOf, NgIf } from '@angular/common';
+import { ApisService } from '../services/apis.service';
+import { User } from '../entity/UserEntity';
+import { response } from 'express';
 
 @Component({
   selector: 'app-mitglieder',
@@ -14,44 +17,41 @@ import { NgForOf, NgIf } from '@angular/common';
 })
 export class MitgliederComponent implements OnInit {
   isFormVisible: boolean = false;
-  media: FavoriteEntity[] = [];
+  user: User[] = [];
 
-  constructor(private reservierungService: ReservierungService) {}
+  constructor(private userService: ApisService) {}
 
   ngOnInit(): void {
-    this.getAllFavorits();
+    this.getAllUsers();
   }
 
   toggleFormVisibility(): void {
     this.isFormVisible = !this.isFormVisible;
   }
 
-  getAllFavorits(): void {
-    this.reservierungService.getAllReservierung().pipe(
-      tap((response: FavoriteEntity[] | FavoriteEntity) => {
+  getAllUsers(): void {
+    this.userService.getAllUser().subscribe(
+      (response: User | User[]) => {
         if (Array.isArray(response)) {
-          // Sortieren der Daten nach media.media.id
-          this.media = response.sort((a, b) => a.media.id - b.media.id);
+          this.user = response;
         } else {
-          this.media = [response];
+          this.user = [response];
         }
-      }),
-      catchError(error => {
-        console.error('Fehler beim Abrufen der Favoriten:', error);
-        throw error;
-      })
-    ).subscribe();
+      }, error => {
+        console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
+      }
+    )
   }
 
-  deleteFavorite(media: FavoriteEntity): void {
-    const mediaID = media.id;
-    this.reservierungService.deleteReservierung(mediaID).subscribe({
-      next: () => {
-        this.getAllFavorits();  // Aktualisiert die Liste nach dem Löschen
-      },
+  deleteUser(user: User): void {
+    console.log(user.id);
+    const userID = user.id;
+    console.log(userID)
+    this.userService.deleteUserByID(userID).subscribe({
       error: (error) => {
-        console.error('Fehler beim Löschen des Favoriten:', error);
+        console.error('Fehler beim Löschen des Benutzers:', error);
       }
     });
   }
+
 }

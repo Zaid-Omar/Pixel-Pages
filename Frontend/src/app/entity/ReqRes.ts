@@ -1,5 +1,5 @@
 import {UserRole} from "./UserRole";
-import {User} from "./User";
+import {User} from "./UserEntity";
 import { NumberValueAccessor } from "@angular/forms";
 
 export class ReqRes {

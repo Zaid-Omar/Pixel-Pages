@@ -3,7 +3,7 @@ import {ReqRes} from "../entity/ReqRes";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {LoginEntity} from '../entity/LoginEntity';
-
+import { User } from '../entity/UserEntity';
 
 @Injectable({
   providedIn: 'root',
@@ -86,7 +86,7 @@ export class ApisService implements OnInit{
     return this.http.post<ReqRes>(`${this.baseUrluser}/add`, registerEntity, this.options)
   }
 
-  public getAllUser(registerEntity: ReqRes): Observable<ReqRes> {
+  public getAllUser(): Observable<User> {
     this.initializeHeaders();
     return this.http.get<ReqRes>(`${this.baseUrluser}/getAll`, this.options)
   }
@@ -109,8 +109,8 @@ export class ApisService implements OnInit{
   //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user, this.options);
   // }
 
-  public deleteUserByID(user: ReqRes): Observable<ReqRes> {
+  public deleteUserByID(user: User): Observable<User> {
     this.initializeHeaders();
-    return this.http.delete<ReqRes>(`${this.baseUrluser}/getUserByEmail/${user.id}`, this.options);
+    return this.http.delete<User>(`${this.baseUrluser}/deleteUser/${user}`, this.options);
   }
 }

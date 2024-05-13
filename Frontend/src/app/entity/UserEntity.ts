@@ -1,22 +1,21 @@
-import {UserRole} from "./UserRole";
-
-
 export class User  {
-   id: number;
-   vorname: string;
-   nachname: string;
-   benutzername: string;
-   email: string;
-   passwort: string;
+   id: any;
+   vorname: any;
+   nachname: any;
+   benutzername: any;
+   email: any;
+   passwort: any;
    roles: any
+
   constructor(
-    id: number,
+    id: any,
     vorname: string,
     nachname: string,
     benutzername: string,
     email: string,
     passwort: string,
     roles: any
+
   ) {
     this.id = id;
     this.vorname = vorname;
