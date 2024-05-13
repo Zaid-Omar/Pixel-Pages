@@ -30,8 +30,7 @@ export class MediaService implements OnInit{
         this.headers = new HttpHeaders();
       }
     } else {
-      console.error('localStorage is not available.');
-      // Fallback: Setze leere HttpHeaders
+      console.error('Kein Token vorhanden!');
       this.headers = new HttpHeaders();
     }
     this.options = { headers: this.headers };

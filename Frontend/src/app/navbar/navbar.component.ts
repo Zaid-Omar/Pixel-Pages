@@ -33,11 +33,8 @@ export class NavbarComponent implements OnInit{
           case '/favoriten':
             this.activeIndex = 2;
             break;
-          case '/kontakt':
-            this.activeIndex = 3;
-            break;
           case '/verwaltung':
-            this.activeIndex = 4;
+            this.activeIndex = 3;
             break;
           case '/login':
             this.activeIndex = -1;

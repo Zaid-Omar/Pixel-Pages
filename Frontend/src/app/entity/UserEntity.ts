@@ -1,11 +1,12 @@
-export class User  {
-   id: any;
-   vorname: any;
-   nachname: any;
-   benutzername: any;
-   email: any;
-   passwort: any;
-   roles: any
+export class User {
+  id: any;
+  vorname: any;
+  nachname: any;
+  benutzername: any;
+  email: any;
+  passwort: any;
+  roles: any;
+  isEditing?: any;
 
   constructor(
     id: any,
@@ -15,7 +16,6 @@ export class User  {
     email: string,
     passwort: string,
     roles: any
-
   ) {
     this.id = id;
     this.vorname = vorname;
@@ -24,6 +24,6 @@ export class User  {
     this.email = email;
     this.passwort = passwort;
     this.roles = roles;
+    this.isEditing = false;
   }
-
 }

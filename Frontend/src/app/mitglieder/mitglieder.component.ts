@@ -7,11 +7,12 @@ import { NgForOf, NgIf } from '@angular/common';
 import { ApisService } from '../services/apis.service';
 import { User } from '../entity/UserEntity';
 import { response } from 'express';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-mitglieder',
   standalone: true,
-  imports: [NgIf, NgForOf],
+  imports: [NgIf, NgForOf, FormsModule],
   templateUrl: './mitglieder.component.html',
   styleUrls: ['./mitglieder.component.scss']
 })
@@ -54,4 +55,20 @@ export class MitgliederComponent implements OnInit {
     });
   }
 
+  toggleEdit(user: User): void {
+    user.isEditing = !user.isEditing;
+  }
+
+  updateUser(user: User): void {
+    console.log(user)
+    this.userService.updateUser(user).subscribe({
+      next: (updatedUser) => {
+        console.log('User updated:', updatedUser);
+        user.isEditing = false;
+      },
+      error: (error) => {
+        console.error('Fehler beim Aktualisieren des Benutzers:', error);
+      }
+    });
+  }
 }

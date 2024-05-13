@@ -36,7 +36,6 @@ export class ApisService implements OnInit{
 
    initializeHeaders(): void {
     if (typeof localStorage !== 'undefined') {
-      console.log('localStorage is not available.');
       const token = localStorage.getItem('token');
       if (token) {
         this.headers = new HttpHeaders({
@@ -46,8 +45,7 @@ export class ApisService implements OnInit{
         this.headers = new HttpHeaders();
       }
     } else {
-      console.error('localStorage is not available.');
-      // Fallback: Setze leere HttpHeaders
+      console.error('Kein Token vorhanden!');
       this.headers = new HttpHeaders();
     }
     this.options = { headers: this.headers };
@@ -108,6 +106,11 @@ export class ApisService implements OnInit{
   // public getUserByUsernameAndEmail(user: ReqRes): Observable<ReqRes> {
   //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user, this.options);
   // }
+
+  public updateUser(user: User): Observable<User> {
+    this.initializeHeaders();
+    return this.http.put<User>(`${this.baseUrluser}/updateUser`, user, this.options);
+  }
 
   public deleteUserByID(user: User): Observable<User> {
     this.initializeHeaders();
