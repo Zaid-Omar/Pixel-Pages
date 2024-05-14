@@ -11,6 +11,7 @@ import { idEntity } from '../entity/idEntity';
 import {BuchungsAnzeige} from "../entity/BuchungsAnzeigeEntity";
 import { switchMap} from "rxjs";
 
+
 @Component({
   selector: 'app-buchungen',
   templateUrl: './buchungen.component.html',
@@ -23,6 +24,21 @@ export class BuchungenComponent implements OnInit{
 
 
   constructor(private buchungServ: BuchungService) {}
+
+  getAllBuchungByUser() {
+    const user_id = this.getCurrentUserId();
+    this.buchungServ.getByUserBuchung(user_id).subscribe(
+      (response: BuchungsAnzeige | BuchungsAnzeige[]) => {
+        if (Array.isArray(response)) {
+          this.bookings = response;
+        } else {
+          this.bookings = [response];
+        }
+
+      }, error => {
+        console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
+      }
+    )}
 
   searchBooks() {
     if (!this.searchTerm) {
@@ -57,35 +73,6 @@ export class BuchungenComponent implements OnInit{
     } else {
       throw new Error("User ID not found in localStorage");
     }}}
-
-  getAllBuchungByUser() {
-    const user_id = this.getCurrentUserId();
-    this.buchungServ.getByUserBuchung(user_id).subscribe(
-      (response: BuchungsAnzeige | BuchungsAnzeige[]) => {
-        if (Array.isArray(response)) {
-          this.bookings = response;
-        } else {
-          this.bookings = [response];
-        }
-
-      }, error => {
-        console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
-      }
-    )
-    this.buchungServ.getByUserBuchung(user_id).pipe(
-      switchMap(response => {
-        console.log(response.id)
-        const mediaID = response.id;
-        console.log(mediaID);
-        return this.buchungServ.updateBuchung(mediaID);
-      })
-    ).subscribe(
-      () => {
-        console.log('Update successful');
-      },
-      error => {
-        console.error('Fehler beim Abrufen oder Aktualisieren der Bookings', error);
-      })}
 
   deleteFavorite(media: FavoriteEntity) {
     const mediaID = media.id;

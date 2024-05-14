@@ -11,8 +11,6 @@ export class FavoriteEntity {
   media: any;
   user:  any;
 
-
-
  constructor(id: number, ab_datum: Date, aus_datum: Date, media: any, user: any ) {
    this.id = id,
    this.ab_datum = ab_datum,
