@@ -33,11 +33,13 @@ public class Reservierung {
 
     @ManyToOne
     @JoinColumn(name = "media_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = {"titel", "autor", "typ", "status", "bild", "isbn"})
+    @JsonIgnoreProperties(value = {"autor", "typ", "status", "bild"})
     private Media media;
-
+    @Temporal(TemporalType.DATE)  // Speichert nur das Datum, nicht die Zeit
     @Column
     private Date aus_datum;
+
+    @Temporal(TemporalType.DATE)  // Speichert nur das Datum, nicht die Zeit
     @Column
     private Date ab_datum;
 
