@@ -64,7 +64,7 @@ export class BuchungService {
 
   public updateBuchung (resv: any){
     this.initializeHeaders();
-    return this.http.put(`${this.baseUrl}/update/${resv}`, this.options);
+    return this.http.put(`${this.baseUrl}/update/${resv}`,{}, this.options);
   }
 
   public deleteBuchung (resv: FavoriteEntity): Observable<ReqRes> {
