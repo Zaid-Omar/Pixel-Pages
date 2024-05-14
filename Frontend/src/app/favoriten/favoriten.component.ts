@@ -14,7 +14,7 @@ import { Media } from '../entity/MediaEntity';
 
 export class FavoritenComponent implements OnInit{
   media: FavoriteEntity[] = [];
-  booking: Media[] = [];
+  booking: FavoriteEntity   [] = [];
 
 
   constructor(private favoritService: ReservierungService) {}

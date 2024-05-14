@@ -8,6 +8,7 @@ import { Buchung } from '../entity/BuchungsEntity';
 import { HttpHeaders } from '@angular/common/http';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { idEntity } from '../entity/idEntity';
+import {BuchungsAnzeige} from "../entity/BuchungsAnzeigeEntity";
 
 @Injectable({
   providedIn: 'root'
@@ -50,9 +51,9 @@ export class BuchungService {
     return this.http.get<FavoriteEntity>(`${this.baseUrl}/getById/${resv}`, this.options);
   }
 
-  public getByUserBuchung(resv: FavoriteEntity): Observable<FavoriteEntity> {
+  public getByUserBuchung(resv: BuchungsAnzeige): Observable<BuchungsAnzeige> {
     this.initializeHeaders();
-    return this.http.get<FavoriteEntity>(`${this.baseUrl}/getByUserId/${resv}`, this.options);
+    return this.http.get<BuchungsAnzeige>(`${this.baseUrl}/getByUserId/${resv}`, this.options);
   }
 
   public addBuchung(resv: Buchung): Observable<Buchung> {
@@ -60,9 +61,9 @@ export class BuchungService {
     return this.http.post<Buchung>(`${this.baseUrl}/add`, resv, this.options);
   }
 
-  public updateBuchung (resv: ReqRes): Observable<ReqRes> {
+  public updateBuchung (resv: FavoriteEntity): Observable<FavoriteEntity> {
     this.initializeHeaders();
-    return this.http.put<ReqRes>(`${this.baseUrl}/update`, resv, this.options);
+    return this.http.put<FavoriteEntity>(`${this.baseUrl}/update/${resv}`, this.options);
   }
 
   public deleteBuchung (resv: FavoriteEntity): Observable<ReqRes> {
