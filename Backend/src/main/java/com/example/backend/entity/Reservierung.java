@@ -28,7 +28,7 @@ public class Reservierung {
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = {"vorname", "nachname", "username", "benutzername","passwort","email", "password", "roles", "authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled"})
+    @JsonIgnoreProperties(value = {"vorname", "nachname", "username", "benutzername","passwort", "password", "roles", "authorities", "accountNonExpired", "accountNonLocked", "credentialsNonExpired", "enabled"})
     private User user;
 
     @ManyToOne
