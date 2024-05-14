@@ -10,14 +10,16 @@ export class FavoriteEntity {
   aus_datum: any;
   media: any;
   user:  any;
+  gebuehren: any;
 
 
 
- constructor(id: number, ab_datum: Date, aus_datum: Date, media: any, user: any ) {
+ constructor(id: number, ab_datum: Date, aus_datum: Date, media: any, user: any, gebuehren:any ) {
    this.id = id,
    this.ab_datum = ab_datum,
    this.aus_datum = aus_datum,
    this.media = media,
-   this.user = user
+   this.user = user,
+   this.gebuehren = gebuehren
  }
 }
