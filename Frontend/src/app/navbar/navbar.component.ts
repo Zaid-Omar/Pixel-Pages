@@ -60,7 +60,6 @@ export class NavbarComponent implements OnInit{
     localStorage.removeItem('currentUser');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('user_id');
-    localStorage.removeItem('borrowedMedia');
     localStorage.removeItem('token');
     localStorage.setItem('refresh', this.refresh.toString());
     this.router.navigate(['/refresh']);

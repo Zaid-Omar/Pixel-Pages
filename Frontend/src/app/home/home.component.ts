@@ -1,18 +1,17 @@
 import { Component, NgModule, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ApisService } from '../services/apis.service';
 import { Media } from '../entity/MediaEntity';
 import { MediaService } from '../services/media.service';
-import { Observable } from 'rxjs';
 import { ReservierungService } from '../services/reservierung.service';
 import { Reservierung } from '../entity/ReservierungsEntity';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { BuchungService } from '../services/buchung.service';
 import { Buchung } from '../entity/BuchungsEntity';
-import { response } from 'express';
-import { User } from '../entity/UserEntity';
+import {VorschlagService} from "../services/vorschlag.service";
 
 @Component({
   selector: 'app-home',
@@ -31,15 +30,28 @@ export class HomeComponent implements OnInit {
   reservierung: any;
   filteredMedia: Media[] = [];
   LoginIn: boolean = false;
+  isFormVisible: boolean = false;
+  form: FormGroup;
+  selectedFileName: string | null = null;
+
+
 
 
   constructor(
     private http: HttpClient,
     private apisService: ApisService,
+    private fb: FormBuilder,
     private mediaService: MediaService,
     private resService: ReservierungService,
-    private BuchungServ: BuchungService
-  ) {}
+    private BuchungServ: BuchungService,
+    private VorschlagServ: VorschlagService
+  ) { this.form = this.fb.group({
+    autor: ['', Validators.required],
+    titel: ['', Validators.required],
+    typ: ['', Validators.required],
+    isbn: ['', Validators.required],
+    bild: [null, Validators.required],
+  });}
 
   ngOnInit() {
     this.getAllMedia();
@@ -179,6 +191,10 @@ export class HomeComponent implements OnInit {
     );
   }
 
+  toggleFormVisibility(): void {
+    this.isFormVisible = !this.isFormVisible;
+  }
+
   getAllFavorits() {
     const user_id = this.getCurrentUserId();
     this.resService.getByUserReservierung(user_id).subscribe(
@@ -216,14 +232,56 @@ export class HomeComponent implements OnInit {
       console.error('localStorage is not available');
       this.borrowedMedia = [];
     }}
+  onImageChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.selectedFileName = file.name;
+      this.fileToBase64(file).then(
+        base64 => this.form.patchValue({ bild: base64 }),
+        error => console.error('Error during image file conversion:', error)
+      );
+    }
   }
 
+  fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
+
+  submit(): void {
+    if (this.form.valid) {
+      const newVorschlag: Media = {
+        ...this.form.value,
+        id: null,
+        status: true
+      };
+      this.VorschlagServ.addMedia(newVorschlag).subscribe({
+        next: res => {
+          console.log('Media added successfully:', res);
+          this.form.reset();
+          this.selectedFileName = null;
+          this.isFormVisible = false;
+          this.getAllMedia();  // Refresh the list of media
+        },
+        error: err => console.error('Error adding media:', err)
+      });
+    } else {
+      console.error('Form is not valid');
+    }
+  }
+}
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [HomeComponent]
 })

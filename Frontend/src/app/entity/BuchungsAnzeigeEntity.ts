@@ -14,7 +14,7 @@ export class BuchungsAnzeige {
 
 
 
-  constructor(id: any, ab_datum: Date, aus_datum: Date, media: any, user: any, gebuehren:any ) {
+  constructor(id: number, ab_datum: Date, aus_datum: Date, media: any, user: any, gebuehren:any ) {
     this.id = id,
       this.ab_datum = ab_datum,
       this.aus_datum = aus_datum,
