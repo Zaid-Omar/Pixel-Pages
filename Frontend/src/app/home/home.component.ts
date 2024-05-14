@@ -11,7 +11,7 @@ import { Reservierung } from '../entity/ReservierungsEntity';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { BuchungService } from '../services/buchung.service';
 import { Buchung } from '../entity/BuchungsEntity';
-import {VorschlagService} from "../services/vorschlag.service";
+import { VorschlagService } from '../services/vorschlag.service';
 
 @Component({
   selector: 'app-home',
