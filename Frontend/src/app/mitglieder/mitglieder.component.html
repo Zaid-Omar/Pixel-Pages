@@ -12,10 +12,10 @@
         <table class="min-w-full divide-y divide-gray-200 font-sans hidden md:table">
           <thead class="bg-gray-50 dark:bg-gray-800">
             <tr>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Benutzername</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vorname</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nachname</th>
-              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">E-Mail</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Benutzername</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Vorname</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Nachname</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">E-Mail</th>
               <th scope="col" class="relative px-6 py-3"><span class="sr-only">Aktionen</span></th>
               <th scope="col" class="relative px-6 py-3"><span class="sr-only">Aktionen</span></th>
 
@@ -23,23 +23,23 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900">
             <tr *ngFor="let item of user">
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                <input [(ngModel)]="item.benutzername" [readonly]="!item.isEditing" class="bg-transparent border-none">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">
+                <input [(ngModel)]="item.benutzername" [readonly]="!item.isEditing" class="bg-transparent border-none text-center">
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                <input [(ngModel)]="item.vorname" [readonly]="!item.isEditing" class="bg-transparent border-none">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">
+                <input [(ngModel)]="item.vorname" [readonly]="!item.isEditing" class="bg-transparent border-none text-center">
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                <input [(ngModel)]="item.nachname" [readonly]="!item.isEditing" class="bg-transparent border-none">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">
+                <input [(ngModel)]="item.nachname" [readonly]="!item.isEditing" class="bg-transparent border-none text-center">
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                <input [(ngModel)]="item.email" [readonly]="!item.isEditing" class="bg-transparent border-none">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">
+                <input [(ngModel)]="item.email" [readonly]="!item.isEditing" class="bg-transparent border-none text-center">
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                 <button (click)="toggleEdit(item)" class="text-blue-500 hover:text-blue-900">{{ item.isEditing ? 'Abbrechen' : 'Bearbeiten' }}</button>
                 <button *ngIf="item.isEditing" (click)="updateUser(item)" class="text-green-500 hover:text-green-900">Speichern</button>
               </td>
-              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                 <button (click)="deleteUser(item)" class="text-indigo-500 hover:text-indigo-900">Entfernen</button>
               </td>
             </tr>

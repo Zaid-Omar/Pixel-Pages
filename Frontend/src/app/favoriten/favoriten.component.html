@@ -12,14 +12,14 @@
       </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900">
-      <tr *ngFor="let media of media">
+      <tr *ngFor="let booking of media">
         <!-- Zentrieren der Texte in den Tabellenzellen -->
-        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ media.media.titel }}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ media.media.isbn }}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ media.ab_datum }}</td>
-        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ media.aus_datum }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.media.titel }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.media.isbn }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.ab_datum }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.aus_datum }}</td>
         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-          <button class="text-indigo-500 hover:text-indigo-900" (click)="deleteFavorite(media)">Entfernen</button>
+          <button class="text-indigo-500 hover:text-indigo-900" (click)="deleteFavorite(booking)">Entfernen</button>
         </td>
       </tr>
       </tbody>

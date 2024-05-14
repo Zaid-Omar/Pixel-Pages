@@ -12,27 +12,27 @@
     <table class="min-w-full divide-y divide-gray-200 font-sans hidden md:table">
       <thead class="bg-gray-50 dark:bg-gray-800">
         <tr>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Autor</th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bild</th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Titel</th>
-          <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Autor</th>
+          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Bild</th>
+          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
+          <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Titel</th>
+          <th scope="col" class="px-6 py-3 text-center   text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
 
           <th scope="col" class="relative px-6 py-3"><span class="sr-only">Löschen</span></th>
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900">
         <tr *ngFor="let booking of bookings">
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ booking.autor }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+          <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.autor }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-gray-900 dark:text-white">
             <img src="{{'data:image/jpg;base64,'+booking.bild}}" alt="Mediencover" class="object-cover" style="height: 20px; width: auto;">
           </td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ booking.isbn }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ booking.titel }}</td>
-          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ booking.typ }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-gray-900 dark:text-white">{{ booking.isbn }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-gray-900 dark:text-white">{{ booking.titel }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-center text-gray-900 dark:text-white">{{ booking.typ }}</td>
 
 
-          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
             <button class="text-red-500 hover:text-red-700" (click)="deleteFavorite(booking)">Löschen</button>
           </td>
         </tr>
