@@ -58,25 +58,30 @@ public class BuchenService {
         buchenRepository.deleteById(id);
     }
 
-    public Buchen updateBuchen(Long id) {
-        LocalDate heute = LocalDate.now();  // Aktuelles Datum
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = heute.format(formatter);  // Formatierung des LocalDate
 
-        // Für das Logging oder weitere Verarbeitung
-        System.out.println("Aktuelles Datum formatiert: " + formattedDate);
-
-        // Umwandlung zurück in ein Date-Objekt, falls benötigt:
+    public void updateAllBuchungen(Long userId) {
+        LocalDate heute = LocalDate.now();
         Date rueckgabeDatum = java.sql.Date.valueOf(heute);
-        Buchen vorhandeneBuchen = buchenRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Buchung nicht gefunden."));
-        double gebuehren = berechneGebuehren(vorhandeneBuchen.getAus_datum(), rueckgabeDatum);
 
-        vorhandeneBuchen.setGebuehren(gebuehren);
+        List<Buchen> buchungen = buchenRepository.getBuchenByUserId(userId);
 
-        return buchenRepository.save(vorhandeneBuchen);
+        for (Buchen buchung : buchungen) {
+            if (buchung.getAus_datum().before(rueckgabeDatum)) {
+                double gebuehren = berechneGebuehren(buchung.getAus_datum(), rueckgabeDatum);
+                buchung.setGebuehren(gebuehren);
+                buchenRepository.save(buchung);
+            }
+        }
     }
 
-
+    private double berechneGebuehren(Date ausgabeDatum, Date heute) {
+        if (ausgabeDatum.before(heute)) {
+            long differenz = heute.getTime() - ausgabeDatum.getTime();
+            long tageUeberfaellig = TimeUnit.MILLISECONDS.toDays(differenz);
+            return tageUeberfaellig * 3.0; // 3€ pro Tag Verspätung
+        }
+        return 0.0;
+    }
     private Date getDateWithoutTime() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
@@ -88,12 +93,5 @@ public class BuchenService {
         return cal.getTime();
     }
 
-    private double berechneGebuehren (Date ausgabeDatum, Date heute) {
-        if (ausgabeDatum.before(heute)) {
-            long differenz = heute.getTime() - ausgabeDatum.getTime();
-            long tageUeberfaellig = TimeUnit.MILLISECONDS.toDays(differenz);
-            return tageUeberfaellig * 3.0;  // 3€ pro Tag Verspätung
-        }
-        return 0.0;
-    }
+
 }

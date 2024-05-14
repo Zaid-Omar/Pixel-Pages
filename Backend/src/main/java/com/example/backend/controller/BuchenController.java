@@ -35,9 +35,8 @@ public class BuchenController {
         return ResponseEntity.ok(buchenService.saveBuchen(buchen));
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<Buchen> updateBuchen(@PathVariable Long id) {
-
-        return ResponseEntity.ok(buchenService.updateBuchen(id));
+    public void updateBuchen(@PathVariable Long id) {
+        buchenService.updateAllBuchungen(id);
     }
 
     @DeleteMapping("/deleteById/{id}")

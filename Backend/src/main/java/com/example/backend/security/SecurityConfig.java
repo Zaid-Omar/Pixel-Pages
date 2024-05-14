@@ -34,7 +34,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers(HttpMethod.PUT,"/api/user/updateUser","/api/media/updateMedia").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/api/user/updateUser","/api/media/updateMedia","/api/buchen/update/").hasRole("ADMIN")
                         .requestMatchers("/api/auth/signin","/api/auth/signup","api/media/getAll").permitAll()
                         .anyRequest().authenticated()
                 )

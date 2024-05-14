@@ -54,6 +54,7 @@ export class BuchungService {
   public getByUserBuchung(resv: BuchungsAnzeige): Observable<BuchungsAnzeige> {
     this.initializeHeaders();
     return this.http.get<BuchungsAnzeige>(`${this.baseUrl}/getByUserId/${resv}`, this.options);
+
   }
 
   public addBuchung(resv: Buchung): Observable<Buchung> {
@@ -61,9 +62,9 @@ export class BuchungService {
     return this.http.post<Buchung>(`${this.baseUrl}/add`, resv, this.options);
   }
 
-  public updateBuchung (resv: FavoriteEntity): Observable<FavoriteEntity> {
+  public updateBuchung (resv: any){
     this.initializeHeaders();
-    return this.http.put<FavoriteEntity>(`${this.baseUrl}/update/${resv}`, this.options);
+    return this.http.put(`${this.baseUrl}/update/${resv}`, this.options);
   }
 
   public deleteBuchung (resv: FavoriteEntity): Observable<ReqRes> {

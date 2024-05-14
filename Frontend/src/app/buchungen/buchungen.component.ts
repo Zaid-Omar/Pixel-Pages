@@ -45,6 +45,7 @@ export class BuchungenComponent implements OnInit{
   }
 
   ngOnInit(): void {
+   this.updateAllBuchungen()
     this.getAllBuchungByUser();
   }
 
@@ -72,20 +73,7 @@ export class BuchungenComponent implements OnInit{
         console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
       }
     )
-    this.buchungServ.getByUserBuchung(user_id).pipe(
-      switchMap(response => {
-        console.log(response.id)
-        const mediaID = response.id;
-        console.log(mediaID);
-        return this.buchungServ.updateBuchung(mediaID);
-      })
-    ).subscribe(
-      () => {
-        console.log('Update successful');
-      },
-      error => {
-        console.error('Fehler beim Abrufen oder Aktualisieren der Bookings', error);
-      })}
+   }
 
   deleteFavorite(media: FavoriteEntity) {
     const mediaID = media.id;
@@ -107,6 +95,19 @@ export class BuchungenComponent implements OnInit{
       error => console.error('Fehler beim Löschen der Buchung:', error)
     );
     location.reload();
+  }
+
+  updateAllBuchungen() {
+    const userId = this.getCurrentUserId();
+    console.log(userId)
+    this.buchungServ.updateBuchung(userId).subscribe({
+      next: () => {
+        console.log('Alle Buchungen erfolgreich aktualisiert');
+      },
+      error: (err) => {
+        console.error('Fehler beim Aktualisieren der Buchungen', err);
+      }
+    });
   }
 
   ausleihen(media: Media) {
