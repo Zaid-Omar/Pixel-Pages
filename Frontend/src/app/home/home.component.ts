@@ -1,5 +1,5 @@
 import { Component, NgModule, OnInit } from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
@@ -36,9 +36,6 @@ export class HomeComponent implements OnInit {
   selectedFileName: string | null = null;
   vorschlag: Vorschlag[] = [];
 
-
-
-
   constructor(
     private http: HttpClient,
     private apisService: ApisService,
@@ -47,10 +44,12 @@ export class HomeComponent implements OnInit {
     private resService: ReservierungService,
     private BuchungServ: BuchungService,
     private VorschlagServ: VorschlagService
-  ) { this.form = this.fb.group({
-    vorschlag: ['', Validators.required],
-    typ: ['', Validators.required],
-  });}
+  ) {
+    this.form = this.fb.group({
+      vorschlag: ['', Validators.required],
+      typ: ['', Validators.required],
+    });
+  }
 
   ngOnInit() {
     this.getAllMedia();
@@ -73,10 +72,9 @@ export class HomeComponent implements OnInit {
   isLoggedIn() {
     const login = localStorage.getItem('isLoggedIn');
     if (login) {
-      this.LoginIn = true
+      this.LoginIn = true;
     }
   }
-
 
   showConfirmation(media: Media) {
     const login = localStorage.getItem('isLoggedIn');
@@ -106,7 +104,7 @@ export class HomeComponent implements OnInit {
         console.log('Buchung erfolgreich:', res);
         let map = new Map();
         map.set(map, media_id);
-        console.log(map)
+        console.log(map);
         this.borrowedMedia.push(media_id);
         this.saveBorrowedMedia();
         media.showConfirmation = false;
@@ -230,7 +228,9 @@ export class HomeComponent implements OnInit {
     } else {
       console.error('localStorage is not available');
       this.borrowedMedia = [];
-    }}
+    }
+  }
+
   onImageChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
@@ -255,14 +255,13 @@ export class HomeComponent implements OnInit {
   submit(): void {
     if (this.form.valid) {
       const user_id = this.getCurrentUserId();
-      console.log(user_id)
-      const { typ, vorschlag  } = this.form.value;
-      const newVorschlag: Vorschlag =
-      {
+      console.log(user_id);
+      const { typ, vorschlag } = this.form.value;
+      const newVorschlag: Vorschlag = {
         typ,
         vorschlag,
-        user: { id: user_id }}
-         ;
+        user: { id: user_id }
+      };
       console.log(newVorschlag);
       this.VorschlagServ.addMedia(newVorschlag).subscribe(
         (res) => {
@@ -275,17 +274,15 @@ export class HomeComponent implements OnInit {
         }
       );
     } else {
+      this.form.markAllAsTouched();
       console.log('Form is not valid');
     }
   }
-
-
 }
 
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,
     FormsModule,
     ReactiveFormsModule
   ],

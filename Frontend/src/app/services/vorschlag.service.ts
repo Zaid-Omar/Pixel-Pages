@@ -40,6 +40,7 @@ export class VorschlagService {
   //* ---------------------------  MEDIA APIS  ---------------------------- *//
 
   public getAllMedia(): Observable<VorschlagBekommen> {
+    this.initializeHeaders();
     return this.http.get<VorschlagBekommen>(`${this.baseUrl}/getAll`, this.options);
   }
 

@@ -19,7 +19,7 @@ import { VorschlagBekommen } from '../entity/VorschlagBekommenEntity';
   templateUrl: './vorschlag.component.html',
   styleUrl: './vorschlag.component.scss'
 })
-export class VorschlagComponent {
+export class VorschlagComponent implements OnInit{
   isFormVisible: boolean = false;
   vorschlag: Vorschlag[] = [];
 
@@ -43,7 +43,7 @@ export class VorschlagComponent {
           this.vorschlag = [response];
         }
       }, error => {
-        console.error('Fehler beim Abrufen der Bookings, Buchungcomponent', error)
+        console.error('Fehler beim Abrufen der Vorschläge, VorschlagComponent', error)
       }
     )
   }

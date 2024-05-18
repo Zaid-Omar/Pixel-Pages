@@ -6,12 +6,10 @@
            [(ngModel)]="searchTerm"
            (input)="searchMedia()">
 
-    <button class="bg-blue-500 text-white  rounded-md ml-4"
+    <button *ngIf="LoginIn" class="bg-blue-500 text-white  rounded-md ml-4"
             (click)="toggleFormVisibility()">
       {{ isFormVisible ? 'Medium Vorschlagen Ausblenden' : 'Medium Vorschlagen' }}
     </button>
-
-
   </div>
 
   <section *ngIf="isFormVisible" class="bg-gray-50 dark:bg-gray-800" style="margin-bottom: 50px;">
@@ -25,11 +23,17 @@
             <div>
               <label for="vorschlag" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Vorschlag:</label>
               <input type="text" formControlName="vorschlag" id="vorschlag" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus-border-blue-500" />
+              <div *ngIf="form.controls['vorschlag'].invalid && form.controls['vorschlag'].touched" class="text-red-600 text-sm">
+                Vorschlag ist erforderlich.
+              </div>
             </div>
 
             <div>
               <label for="typ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Typ:</label>
               <input type="text" formControlName="typ" id="typ" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus-border-blue-500" />
+              <div *ngIf="form.controls['typ'].invalid && form.controls['typ'].touched" class="text-red-600 text-sm">
+                Typ ist erforderlich.
+              </div>
             </div>
 
             <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus-ring-primary-800">
@@ -40,6 +44,7 @@
       </div>
     </div>
   </section>
+
   <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
     <ng-container *ngFor="let media of filteredMedia">
       <div class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
