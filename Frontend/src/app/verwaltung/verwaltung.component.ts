@@ -4,11 +4,12 @@ import { AddMediumComponent } from '../add-medium/add-medium.component';
 import { EditComponent } from '../edit/edit.component';
 import { MitgliederComponent } from '../mitglieder/mitglieder.component';
 import { ReservierungsUebersichtComponent } from '../reservierungs-uebersicht/reservierungs-uebersicht.component';
+import { VorschlagComponent } from '../vorschlag/vorschlag.component';
 
 @Component({
   selector: 'app-verwaltung',
   standalone: true,
-  imports: [AddMediumComponent, VerwaltungComponent, EditComponent, MitgliederComponent, ReservierungsUebersichtComponent],
+  imports: [AddMediumComponent, VerwaltungComponent, EditComponent, MitgliederComponent, ReservierungsUebersichtComponent, VorschlagComponent],
   templateUrl: './verwaltung.component.html',
   styleUrl: './verwaltung.component.scss'
 })

@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { Media } from '../entity/MediaEntity';
 import { HttpHeaders } from '@angular/common/http';
 import { Vorschlag } from '../entity/VorschlagEntity';
+import { VorschlagBekommen } from '../entity/VorschlagBekommenEntity';
 @Injectable({
   providedIn: 'root'
 })
@@ -38,8 +39,8 @@ export class VorschlagService {
 
   //* ---------------------------  MEDIA APIS  ---------------------------- *//
 
-  public getAllMedia(): Observable<Media> {
-    return this.http.get<Media>(`${this.baseUrl}/getAll`);
+  public getAllMedia(): Observable<VorschlagBekommen> {
+    return this.http.get<VorschlagBekommen>(`${this.baseUrl}/getAll`, this.options);
   }
 
   public getAllStatusTrueMedia(): Observable<ReqRes> {
