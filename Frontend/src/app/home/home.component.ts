@@ -12,6 +12,7 @@ import { FavoriteEntity } from '../entity/FavoriteEntity';
 import { BuchungService } from '../services/buchung.service';
 import { Buchung } from '../entity/BuchungsEntity';
 import { VorschlagService } from '../services/vorschlag.service';
+import { Vorschlag } from '../entity/VorschlagEntity';
 
 @Component({
   selector: 'app-home',
@@ -33,6 +34,7 @@ export class HomeComponent implements OnInit {
   isFormVisible: boolean = false;
   form: FormGroup;
   selectedFileName: string | null = null;
+  vorschlag: Vorschlag[] = [];
 
 
 
@@ -46,11 +48,8 @@ export class HomeComponent implements OnInit {
     private BuchungServ: BuchungService,
     private VorschlagServ: VorschlagService
   ) { this.form = this.fb.group({
-    autor: ['', Validators.required],
-    titel: ['', Validators.required],
+    vorschlag: ['', Validators.required],
     typ: ['', Validators.required],
-    isbn: ['', Validators.required],
-    bild: [null, Validators.required],
   });}
 
   ngOnInit() {
@@ -255,18 +254,13 @@ export class HomeComponent implements OnInit {
 
   submit(): void {
     if (this.form.valid) {
-      const newVorschlag: Media = {
-        ...this.form.value,
-        id: null,
-        status: true
-      };
-      this.VorschlagServ.addMedia(newVorschlag).subscribe({
+       this.vorschlag = [this.form.value.typ,this.form.value.vorschlag]
+      console.log(this.vorschlag)
+      this.VorschlagServ.addMedia(this.vorschlag).subscribe({
         next: res => {
           console.log('Media added successfully:', res);
           this.form.reset();
-          this.selectedFileName = null;
           this.isFormVisible = false;
-          this.getAllMedia();  // Refresh the list of media
         },
         error: err => console.error('Error adding media:', err)
       });
