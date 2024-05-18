@@ -4,6 +4,7 @@ import { ReqRes } from '../entity/ReqRes';
 import { Observable } from 'rxjs';
 import { Media } from '../entity/MediaEntity';
 import { HttpHeaders } from '@angular/common/http';
+import { Vorschlag } from '../entity/VorschlagEntity';
 @Injectable({
   providedIn: 'root'
 })
@@ -56,18 +57,13 @@ export class VorschlagService {
     return this.http.get<ReqRes>(`${this.baseUrl}/getByTitle`, this.options);
   }
 
-  public addMedia(media: Media): Observable<Media> {
+  public addMedia(media: Vorschlag): Observable<Vorschlag> {
     this.initializeHeaders();
-    return this.http.post<Media>(`${this.baseUrl}/addMedia`, media, this.options);
-  }
-
-  public updateMedia(media: ReqRes): Observable<ReqRes> {
-    this.initializeHeaders();
-    return this.http.put<ReqRes>(`${this.baseUrl}/updateMedia`, media, this.options);
+    return this.http.post<Vorschlag>(`${this.baseUrl}/add`, media, this.options);
   }
 
   public deleteMediaByID(media: ReqRes): Observable<ReqRes> {
     this.initializeHeaders();
-    return this.http.delete<ReqRes>(`${this.baseUrl}/deleteMedia/${media}`, this.options);
+    return this.http.delete<ReqRes>(`${this.baseUrl}/delete/${media}`, this.options);
   }
 }
