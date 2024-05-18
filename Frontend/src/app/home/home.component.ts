@@ -34,7 +34,6 @@ export class HomeComponent implements OnInit {
   isFormVisible: boolean = false;
   form: FormGroup;
   selectedFileName: string | null = null;
-  vorschlag: Vorschlag[] = [];
 
 
 
@@ -254,20 +253,25 @@ export class HomeComponent implements OnInit {
 
   submit(): void {
     if (this.form.valid) {
-       this.vorschlag = [this.form.value.typ,this.form.value.vorschlag]
-      console.log(this.vorschlag)
-      this.VorschlagServ.addMedia(this.vorschlag).subscribe({
-        next: res => {
+      const { typ, vorschlag } = this.form.value;
+      const newVorschlag = { typ, vorschlag };
+      console.log(newVorschlag);
+      this.VorschlagServ.addMedia(newVorschlag).subscribe(
+        (res) => {
           console.log('Media added successfully:', res);
           this.form.reset();
           this.isFormVisible = false;
         },
-        error: err => console.error('Error adding media:', err)
-      });
+        (err) => {
+          console.error('Error adding media:', err);
+        }
+      );
     } else {
-      console.error('Form is not valid');
+      console.log('Form is not valid');
     }
   }
+
+
 }
 
 @NgModule({
