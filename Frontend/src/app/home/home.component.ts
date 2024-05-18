@@ -254,14 +254,15 @@ export class HomeComponent implements OnInit {
 
   submit(): void {
     if (this.form.valid) {
-      const user = this.getCurrentUserId();
-      console.log(user)
+      const user_id = this.getCurrentUserId();
+      console.log(user_id)
       const { typ, vorschlag  } = this.form.value;
-      const newVorschlag = new Vorschlag(
-        null,
+      const newVorschlag: Vorschlag =
+      {
         typ,
         vorschlag,
-        user );
+        user: { id: user_id }}
+         ;
       console.log(newVorschlag);
       this.VorschlagServ.addMedia(newVorschlag).subscribe(
         (res) => {

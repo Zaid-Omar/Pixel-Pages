@@ -14,21 +14,34 @@
             <div>
               <label for="autor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Autor:</label>
               <input type="text" formControlName="autor" id="autor" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+              <div *ngIf="submitted && f['autor'].errors" class="text-red-500 text-sm mt-1">
+                Autor ist erforderlich.
+              </div>
             </div>
 
             <div>
               <label for="titel" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Titel:</label>
               <input type="text" formControlName="titel" id="titel" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus-border-blue-500" />
+              <div *ngIf="submitted && f['titel'].errors" class="text-red-500 text-sm mt-1">
+                Titel ist erforderlich.
+              </div>
             </div>
 
             <div>
               <label for="typ" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Typ:</label>
               <input type="text" formControlName="typ" id="typ" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus-border-blue-500" />
+              <div *ngIf="submitted && f['typ'].errors" class="text-red-500 text-sm mt-1">
+                Typ ist erforderlich.
+              </div>
             </div>
 
             <div>
               <label for="isbn" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ISBN:</label>
               <input type="text" formControlName="isbn" id="isbn" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus-ring-blue-500 dark:focus-border-blue-500" />
+              <div *ngIf="submitted && f['isbn'].errors" class="text-red-500 text-sm mt-1">
+                <div *ngIf="f['isbn'].hasError('required')">ISBN ist erforderlich.</div>
+                <div *ngIf="f['isbn'].hasError('invalidIsbn')">ISBN muss 13 Ziffern enthalten.</div>
+              </div>
             </div>
 
             <div class="flex flex-col mb-4">
@@ -37,6 +50,9 @@
                 <input type="file" (change)="onImageChange($event)" id="bild" class="absolute inset-0 opacity-0 cursor-pointer" />
                 <span class="inline-block bg-primary-600 text-white font-medium px-4 py-2 rounded-lg cursor-pointer hover:bg-primary-700">Datei auswählen</span>
                 <span *ngIf="selectedFileName" class="ml-4 text-gray-900 dark:text-white">{{ selectedFileName }}</span>
+              </div>
+              <div *ngIf="submitted && f['bild'].errors" class="text-red-500 text-sm mt-1">
+                Bild ist erforderlich.
               </div>
             </div>
 

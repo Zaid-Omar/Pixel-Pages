@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { MediaService } from '../services/media.service';
 import { Media } from '../entity/MediaEntity';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { VerwaltungComponent } from '../verwaltung/verwaltung.component';
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, VerwaltungComponent],
   templateUrl: './add-medium.component.html',
-  styleUrl: './add-medium.component.scss'
+  styleUrls: ['./add-medium.component.scss']
 })
 
 export class AddMediumComponent {
@@ -23,14 +23,14 @@ export class AddMediumComponent {
   isTableVisible: boolean = false;
   searchTerm: string = '';
   bookings: FavoriteEntity[] = [];
-
+  submitted = false;
 
   constructor(private fb: FormBuilder, private mediaServ: MediaService, private buchungServ: BuchungService) {
     this.form = this.fb.group({
       autor: ['', Validators.required],
       titel: ['', Validators.required],
       typ: ['', Validators.required],
-      isbn: ['', Validators.required],
+      isbn: ['', [Validators.required, this.isbnValidator]],
       status: [true, Validators.required],
       bild: [null, Validators.required],
     });
@@ -77,6 +77,7 @@ export class AddMediumComponent {
   }
 
   submit(): void {
+    this.submitted = true;
     if (this.form.valid) {
       const { autor, titel, typ, isbn, status, bild } = this.form.value;
       const newMedia = new Media(
@@ -95,6 +96,7 @@ export class AddMediumComponent {
           this.selectedFileName = null;
           this.imageBase64 = null;
           this.isFormVisible = false;
+          this.submitted = false;
         },
         (err) => {
           console.error('Error adding media:', err);
@@ -131,4 +133,18 @@ export class AddMediumComponent {
       }
     );
   }
+
+  isbnValidator(control: AbstractControl): ValidationErrors | null {
+    const isbn = control.value;
+    if (!isbn) {
+      return { required: true };
+    }
+    const isbnRegex = /^[0-9]{13}$/;
+    if (!isbnRegex.test(isbn)) {
+      return { invalidIsbn: true };
+    }
+    return null;
+  }
+
+  get f() { return this.form.controls; }
 }
