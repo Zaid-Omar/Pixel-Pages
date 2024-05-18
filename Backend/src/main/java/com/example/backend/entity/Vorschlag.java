@@ -17,8 +17,10 @@ public class Vorschlag {
     private Long id;
 
     @Column
-    private String kategorie;
+    private String typ;
 
     @Column
     private String vorschlag;
+
+
 }
