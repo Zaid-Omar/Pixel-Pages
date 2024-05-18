@@ -22,5 +22,7 @@ public class Vorschlag {
     @Column
     private String vorschlag;
 
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 }
