@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
   isFormVisible: boolean = false;
   form: FormGroup;
   selectedFileName: string | null = null;
+  vorschlag: Vorschlag[] = [];
 
 
 
@@ -253,8 +254,14 @@ export class HomeComponent implements OnInit {
 
   submit(): void {
     if (this.form.valid) {
-      const { typ, vorschlag } = this.form.value;
-      const newVorschlag = { typ, vorschlag };
+      const user = this.getCurrentUserId();
+      console.log(user)
+      const { typ, vorschlag  } = this.form.value;
+      const newVorschlag = new Vorschlag(
+        null,
+        typ,
+        vorschlag,
+        user );
       console.log(newVorschlag);
       this.VorschlagServ.addMedia(newVorschlag).subscribe(
         (res) => {
