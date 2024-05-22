@@ -26,8 +26,8 @@ public class ReservierungService {
     public Reservierung findById(Long id) {
         return reservierungRepository.findById(id).orElse(null);
     }
-    public Reservierung findByUser(User user) {
-         return reservierungRepository.findByUser(user);
+    public List<Reservierung> findByUser(Long id) {
+         return reservierungRepository.getReservierungByUserId(id);
     }
 
     public Reservierung add(Reservierung reservierung) {
@@ -54,7 +54,7 @@ public class ReservierungService {
         reservierungRepository.deleteById(id);
     }
 
-    private Date getDateWithoutTime() {
+    public Date getDateWithoutTime() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.DATE, 7);

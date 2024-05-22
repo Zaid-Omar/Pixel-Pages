@@ -1,1 +1,43 @@
-<p>favoriten works!</p>
+<div class="abstand">
+  <div class="container mx-auto py-4">
+    <table class="min-w-full divide-y divide-gray-200 font-sans hidden md:table">
+      <thead class="bg-gray-50 dark:bg-gray-800">
+      <tr>
+        <!-- Zentrieren der Texte in den Tabellenköpfen -->
+        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Media</th>
+        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ISBN</th>
+        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">ab</th>
+        <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">bis</th>
+        <th scope="col" class="relative px-6 py-3"><span class="sr-only">Löschen</span></th>
+      </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900">
+      <tr *ngFor="let booking of media">
+        <!-- Zentrieren der Texte in den Tabellenzellen -->
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.media.titel }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.media.isbn }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.ab_datum }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-center text-sm text-gray-900 dark:text-white">{{ booking.aus_datum }}</td>
+        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <button class="text-indigo-500 hover:text-indigo-900" style="color: red" (click)="deleteFavorite(booking)">Entfernen</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <!-- Zentrieren der Inhalte im mobilen Grid-Layout -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:hidden">
+      <div *ngFor="let media of media" class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
+        <p class="text-center text-gray-600 mb-2 dark:text-gray-400">ID: {{ media.media.titel }}
+        <p class="text-center text-gray-600 mb-2 dark:text-gray-400">ID: {{ media.media.isbn }}</p>
+                <p class="text-center text-gray-600 mb-2 dark:text-gray-400">ab: {{ media.ab_datum }}</p>
+        <p class="text-center text-gray-600 mb-2 dark:text-gray-400">bis: {{ media.aus_datum }}</p>
+        <div class="flex justify-center mt-4">
+          <button class="bg-blue-500 text-white px-4 py-2 rounded-md" style="color: red">Entfernen</button>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="media.length === 0" class="text-center text-gray-600 dark:text-gray-400 mt-8">
+      Keine Favoriten gefunden.
+    </div>
+  </div>
+</div>

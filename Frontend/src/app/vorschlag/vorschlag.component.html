@@ -1,0 +1,43 @@
+<div class="flex flex-col items-center justify-start px-6 py-8 mx-auto lg:py-0">
+  <div class="w-full bg-white rounded-lg shadow dark:border dark:bg-gray-900 dark:border-gray-700">
+    <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+      <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white text-center">
+        Vorschläge anschauen
+      </h1>
+      <button (click)="toggleFormVisibility()" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+        {{ isFormVisible ? 'Vorschläge ausblenden' : 'Vorschläge aufklappen' }}
+      </button>
+      <div *ngIf="isFormVisible" class="container mx-auto py-4">
+        <!-- Tabelle für größere Bildschirme -->
+        <table class="min-w-full divide-y divide-gray-200 font-sans hidden md:table">
+          <thead class="bg-gray-50 dark:bg-gray-800">
+            <tr>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Vorschlag</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Typ</th>
+              <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">E-Mail</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-900">
+            <tr *ngFor="let item of vorschlag">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-white">{{ item.vorschlag }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-white">{{ item.typ }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-900 dark:text-white">{{ item.user.email }}</td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Responsive Cards für kleinere Bildschirme -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:hidden">
+          <div *ngFor="let item of vorschlag" class="bg-white dark:bg-gray-900 border border-gray-600 rounded-md p-4 shadow-md">
+            <div>{{ item.vorschlag }}</div>
+            <div>{{ item.typ }}</div>
+            <div>{{ item.user.email }}</div>
+          </div>
+        </div>
+        <!-- Nachricht, falls keine Benutzer gefunden -->
+        <div *ngIf="vorschlag.length === 0" class="text-center text-gray-600 dark:text-gray-400 mt-8">
+          Keine Vorschläge gefunden.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

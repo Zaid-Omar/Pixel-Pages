@@ -1,23 +1,22 @@
-import { Injectable } from '@angular/core';
-import { ReqRes } from "../entity/ReqRes";
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
-import { LoginEntity } from '../entity/LoginEntity';
-import { register } from 'node:module';
+import {Injectable, OnInit} from '@angular/core';
+import {ReqRes} from "../entity/ReqRes";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {LoginEntity} from '../entity/LoginEntity';
+import { User } from '../entity/UserEntity';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ApisService {
-   loginRequestSubject = new BehaviorSubject<boolean>(false);
-   vornameSubject = new BehaviorSubject<string>('');
-   nachnameSubject = new BehaviorSubject<string>('');
-   emailSubject = new BehaviorSubject<string>('');
-   passwordSubject = new BehaviorSubject<string>('');
-   benutzernameSubject = new BehaviorSubject<string>('');
+export class ApisService implements OnInit{
+  loginRequestSubject = new BehaviorSubject<boolean>(false);
+  vornameSubject = new BehaviorSubject<string>('');
+  nachnameSubject = new BehaviorSubject<string>('');
+  emailSubject = new BehaviorSubject<string>('');
+  passwordSubject = new BehaviorSubject<string>('');
+  benutzernameSubject = new BehaviorSubject<string>('');
 
-  loginRequest$  = this.loginRequestSubject.asObservable();
+  loginRequest$ = this.loginRequestSubject.asObservable();
   username$: Observable<string> = this.vornameSubject.asObservable();
   name$: Observable<string> = this.nachnameSubject.asObservable();
   email$: Observable<string> = this.emailSubject.asObservable();
@@ -26,11 +25,31 @@ export class ApisService {
 
   private baseUrl = 'http://localhost:8080/api/auth';
   private baseUrluser = 'http://localhost:8080/api/user';
-  private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+   headers: HttpHeaders = new HttpHeaders();
+  options: { headers: HttpHeaders } = { headers: this.headers };
 
   constructor(private http: HttpClient) {}
 
+  ngOnInit() {
+    this.initializeHeaders();
+  }
 
+   initializeHeaders(): void {
+    if (typeof localStorage !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.headers = new HttpHeaders({
+          'Authorization': `Bearer ${token}`
+        });
+      } else {
+        this.headers = new HttpHeaders();
+      }
+    } else {
+      console.error('Kein Token vorhanden!');
+      this.headers = new HttpHeaders();
+    }
+    this.options = { headers: this.headers };
+  }
 
   updateSharedData(vorname: string, nachname: string, email: string, password: string, benutzername: string) {
     this.vornameSubject.next(vorname);
@@ -61,30 +80,40 @@ export class ApisService {
 //* ---------------------------  USER APIS  ---------------------------- *//
 
   public addUser(registerEntity: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrluser}/add`, registerEntity)
+    this.initializeHeaders();
+    return this.http.post<ReqRes>(`${this.baseUrluser}/add`, registerEntity, this.options)
   }
 
-  public getAllUser(registerEntity: ReqRes): Observable<ReqRes> {
-    return this.http.get<ReqRes>(`${this.baseUrluser}/getAll`)
+  public getAllUser(): Observable<User> {
+    this.initializeHeaders();
+    return this.http.get<User>(`${this.baseUrluser}/getAll`, this.options)
   }
 
   public getUserByID(registerEntity: ReqRes): Observable<ReqRes> {
-    return this.http.get<ReqRes>(`${this.baseUrluser}/getUserById/${registerEntity.id}`)
+    this.initializeHeaders();
+    return this.http.get<ReqRes>(`${this.baseUrluser}/getUserById/${registerEntity.id}`, this.options)
   }
 
-  public getUserByUsername(user: ReqRes): Observable<ReqRes> {
-    return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
+  public getUserByUsername(user: LoginEntity): Observable<ReqRes> {
+    this.initializeHeaders();
+    return this.http.post<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user, this.options);
   }
 
   // public getUserByBenutzername(user: ReqRes): Observable<ReqRes> {
-  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user);
+  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getUserByEmail`, user, this.options);
   // }
 
   // public getUserByUsernameAndEmail(user: ReqRes): Observable<ReqRes> {
-  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user);
+  //   return this.http.get<ReqRes>(`${this.baseUrluser}/getByBenutzernameAndEmail`, user, this.options);
   // }
 
-  public deleteUserByID(user: ReqRes): Observable<ReqRes> {
-    return this.http.delete<ReqRes>(`${this.baseUrluser}/getUserByEmail/${user.id}`);
+  public updateUser(user: any): Observable<any> {
+    this.initializeHeaders();
+    return this.http.put<any>(`${this.baseUrluser}/updateUser`, user, this.options);
+  }
+
+  public deleteUserByID(user: User): Observable<User> {
+    this.initializeHeaders();
+    return this.http.delete<User>(`${this.baseUrluser}/deleteUser/${user}`, this.options);
   }
 }

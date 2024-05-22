@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges, ChangeDetectorRef} from '@angular/core';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { ApisService } from '../services/apis.service';
 import { NgIf } from '@angular/common';
@@ -16,9 +16,13 @@ import { CommonModule } from '@angular/common';
 export class NavbarComponent implements OnInit{
   activeIndex: number = 0;
   anmeldeboolean: boolean = false;
-  username: string = 'bisher keine Lösung';
+  username: string = '';
+  isAdmin: boolean = false;
+  proder: string = "";
+  refresh: boolean = false;
 
-  constructor(private router: Router, private prodser: ApisService) {
+
+  constructor(private router: Router, private prodser: ApisService, private cdr: ChangeDetectorRef) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         switch (event.url) {
@@ -31,7 +35,7 @@ export class NavbarComponent implements OnInit{
           case '/favoriten':
             this.activeIndex = 2;
             break;
-          case '/kontakt':
+          case '/verwaltung':
             this.activeIndex = 3;
             break;
           case '/login':
@@ -52,18 +56,34 @@ export class NavbarComponent implements OnInit{
     this.activeIndex = -1;
   }
 
+  abmelden() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('token');
+    localStorage.setItem('refresh', this.refresh.toString());
+    this.router.navigate(['/refresh']);
+  }
+
   ngOnInit() {
-      console.log(this.username)
+    console.log("navbar sitnkt")
     if (typeof localStorage !== 'undefined') {
-      try {
-        this.anmeldeboolean = localStorage.getItem('isLoggedIn') === 'true';
-
-      } catch (error) {
-        console.error('Error accessing localStorage:', error);
+      const currentUserDataString = localStorage.getItem('currentUser');
+      if (currentUserDataString) {
+        const currentUserData = JSON.parse(currentUserDataString);
+        this.username = currentUserData.benutzername;
+        const token = currentUserData.token
+        const hasAdminRole = currentUserData.authorities.some((authority: { authority: string }) => authority.authority === 'ROLE_ADMIN');
+        this.isAdmin = hasAdminRole;
+      } else {
+        console.log('Der currentUser-Schlüssel wurde im localStorage nicht gefunden.');
+        this.isAdmin = false;
       }
+
+      const login = localStorage.getItem('isLoggedIn');
+      this.anmeldeboolean = login ? true : false;
+    } else {
+      console.log('Local storage is not available.');
     }
-
-}
-
-
+  }
 }

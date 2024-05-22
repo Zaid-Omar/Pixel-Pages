@@ -1,16 +1,16 @@
-import {UserRole} from "./UserRole";
+export class User {
+  id: any;
+  vorname: any;
+  nachname: any;
+  benutzername: any;
+  email: any;
+  passwort: any;
+  roles: any;
+  isEditing?: any;
+  authorities: any;
 
-
-export class User  {
-  private id: number;
-  private vorname: string;
-  private nachname: string;
-  private benutzername: string;
-  private email: string;
-  private passwort: string;
-  private roles: any
   constructor(
-    id: number,
+    id: any,
     vorname: string,
     nachname: string,
     benutzername: string,
@@ -25,6 +25,6 @@ export class User  {
     this.email = email;
     this.passwort = passwort;
     this.roles = roles;
+    this.isEditing = false;
   }
-
 }

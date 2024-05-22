@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reservierung/")
+@RequestMapping("/api/reservierung")
 @CrossOrigin
 public class ResverierungController {
     @Autowired
@@ -24,9 +24,9 @@ public class ResverierungController {
     public ResponseEntity<Reservierung> findById(@PathVariable Long id) {
         return ResponseEntity.ok(reservierungService.findById(id));
     }
-    @GetMapping("/getByUser")
-    public ResponseEntity<Reservierung> findByUser(@RequestBody User user) {
-        return ResponseEntity.ok(reservierungService.findByUser(user));
+    @GetMapping("/getByUserId/{id}")
+    public ResponseEntity<List<Reservierung>> findByUser(@PathVariable Long id) {
+        return ResponseEntity.ok(reservierungService.findByUser(id));
     }
     @PostMapping("/add")
     public ResponseEntity<Reservierung> save(@RequestBody Reservierung reservierung) {
@@ -40,6 +40,4 @@ public class ResverierungController {
     public void delete(@PathVariable Long id) {
         reservierungService.delete(id);
     }
-
-
 }

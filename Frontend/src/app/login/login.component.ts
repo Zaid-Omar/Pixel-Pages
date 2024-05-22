@@ -3,13 +3,13 @@ import { ReqRes } from "../entity/ReqRes";
 import { HttpClient, HttpClientModule, HttpHeaders } from "@angular/common/http";
 import { LoginEntity } from "../entity/LoginEntity";
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { User } from "../entity/User";
+import { User } from "../entity/UserEntity";
 import { Media } from "../entity/MediaEntity";
-import { DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
 import { Component, Output, EventEmitter } from '@angular/core';
 import { ApisService } from '../services/apis.service';
-import { log } from 'console';
+import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-login',
@@ -19,6 +19,7 @@ import { log } from 'console';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    CommonModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
@@ -26,68 +27,63 @@ import { log } from 'console';
 export class LoginComponent {
   @Output() dataEvent = new EventEmitter<string>();
   loginForm: FormGroup;
+  isSubmitted = false;
   token: any;
   bild: any;
+  benutzername: string = '';
   x: number = 0
+  refresh: boolean = false;
 
   constructor(
     private http: HttpClient,
-    private sanitizer: DomSanitizer,
     private formBuilder: FormBuilder,
     private router: Router,
-    private prodser: ApisService
+    private prodser: ApisService,
   ) {
     this.loginForm = this.formBuilder.group({
-      email: ['', Validators.required],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email]],
+      passwort: ['', Validators.required]
     });
   }
 
-  test() {
+  login() {
+    this.isSubmitted = true;
     if (this.loginForm.valid) {
-      const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
+      const login: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.passwort);
       this.prodser.signIn(login).subscribe(
         (response: ReqRes) => {
           if (response.token) {
+            this.router.navigate(['/refresh']);
             let isLoggedIn = true;
-            this.prodser.updateLoginRequest(isLoggedIn);
+            localStorage.setItem('refresh', this.refresh.toString());
             localStorage.setItem('isLoggedIn', isLoggedIn.toString());
-            this.token = response.token;
-            localStorage.setItem("token", response.token);
-            this.router.navigate(['/']);
-
-             const offer : ReqRes = this.loginForm.value;
-             this.prodser.getUserByUsername(offer).subscribe(
-             (response: ReqRes) => {
-              localStorage.setItem('currentUser', JSON.stringify(response));
-               localStorage.setItem('user_id',JSON.stringify(response.id));
+            localStorage.setItem('token', response.token);
+            let offer: LoginEntity = new LoginEntity(this.loginForm.value.email, this.loginForm.value.password);
+            console.log(offer)
+            this.prodser.getUserByUsername(offer).subscribe(
+              (userData: ReqRes) => {
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+                localStorage.setItem('user_id', JSON.stringify(userData.id));
                 this.prodser.updateSharedData(
-                 response.vorname,
-                response.nachname,
-                response.email,
-                 response.passwort,
-                 response.benutzername
-               );
-               console.log(this.prodser.vornameSubject.getValue())
-               console.log(response.vorname,
-                 response.nachname,
-                 response.email,
-                 response.passwort,
-                 response.benutzername,
-               response.id)
+                  userData.vorname,
+                  userData.nachname,
+                  userData.email,
+                  userData.passwort,
+                  userData.benutzername
+                );
+              }
+            );
 
-           })
-
-        } else {
-          console.log('Anmeldung fehlgeschlagen')
-          console.log(this.loginForm.value);
+          } else {
+            console.log('Anmeldung fehlgeschlagen');
+          }
+        },
+        error => {
+          console.error('Fehler bei der Anmeldung:', error);
         }
-      },
-      error => {
-        console.error('Fehler bei der Anmeldung:', error);
-      }
-    );
-}}
+      );
+    }
+  }
 
 
   public getAllUsers() {
