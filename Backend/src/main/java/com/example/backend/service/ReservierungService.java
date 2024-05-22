@@ -54,7 +54,7 @@ public class ReservierungService {
         reservierungRepository.deleteById(id);
     }
 
-    private Date getDateWithoutTime() {
+    public Date getDateWithoutTime() {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         cal.add(Calendar.DATE, 7);

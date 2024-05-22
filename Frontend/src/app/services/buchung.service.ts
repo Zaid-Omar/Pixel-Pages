@@ -64,6 +64,7 @@ export class BuchungService {
 
   public updateBuchung (resv: any){
     this.initializeHeaders();
+    console.log(resv)
     return this.http.put(`${this.baseUrl}/update/${resv}`,{}, this.options);
   }
 

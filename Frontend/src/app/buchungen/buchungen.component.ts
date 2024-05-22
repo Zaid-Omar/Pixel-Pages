@@ -1,4 +1,4 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import {Component, NgModule, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FavoriteEntity } from '../entity/FavoriteEntity';
@@ -62,7 +62,13 @@ export class BuchungenComponent implements OnInit{
 
   ngOnInit(): void {
     this.getAllBuchungByUser();
+    this.buchungServ.updateBuchung(this.getCurrentUserId()).subscribe(
+      () =>{
+      }
+    );
   }
+
+
 
   getCurrentUserId(): any {
     if (typeof localStorage !== 'undefined') {
